@@ -1,0 +1,19 @@
+# .gitignore
+
+# Backend
+__pycache__/
+*.pyc
+*.log
+.venv/
+venv/
+env/
+
+# Frontend
+node_modules/
+/frontend/dist/ # Build zlozky, ak pouzijete Vite/Webpack
+
+.DS_Store # macOS
+Thumbs.db # Windows
+ehthumbs.db # Windows
+.vscode/ # Konfiguracia editora
+.idea/ # Konfiguracia PyCharm/IntelliJ
