@@ -39,7 +39,7 @@ Before running the project, make sure you have the following installed:
 1. Clone this repository:
    
    ```bash
-   git clone <repository-url>
+   git clone git@github.com:norko0722/audio-classification.git
    cd audio-classification
    ```
 
