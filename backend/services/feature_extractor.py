@@ -1,7 +1,6 @@
 import librosa
 import numpy as np
 
-
 def extract_features(audio, sr):
     # MFCC features
     mfccs = librosa.feature.mfcc(y=audio, sr=sr, n_mfcc=13)
