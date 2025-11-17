@@ -20,3 +20,6 @@ class ModelService:
         genre = self.label_encoder.inverse_transform(prediction)[0]
     
         return genre
+
+
+model_service = ModelService()
