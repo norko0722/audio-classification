@@ -1,7 +1,6 @@
 from fastapi import FastAPI, UploadFile, File, HTTPException
 from fastapi.responses import JSONResponse
 import librosa
-import numpy as np
 from collections import Counter
 from services.model_service import model_service
 import tempfile
@@ -20,17 +19,52 @@ async def audio_classification(file: UploadFile = File(...), segment_duration: i
             status_code=400,
             detail="No file uploaded!"
         )
-    if not file.endswith(".wav"):
+    if not file.filename.lower().endswith(".wav"): 
         raise HTTPException(
             status_code=415,
             detail="File must be in .wav format"
         )
+
+    tmp_path = None
+    
     try:
         with tempfile.NamedTemporaryFile(delete=False, suffix=".wav") as tmp:
             tmp.write(await file.read())
             tmp_path = tmp.name
 
-    except Exception:
-        raise HTTPException(status_code=500, detail='Something went wrong')
+        audio, sr = librosa.load(tmp_path, sr=22050)
+        segment_samples = int(segment_duration * sr)
+
+        predicted_genres = []
+        for i in range(0, len(audio), segment_samples):
+            segment = audio[i : i + segment_samples]
+            if len(segment) < segment_samples:
+                continue
+            genre = model_service.predict(segment, sr)
+            predicted_genres.append(genre)
+
+        if not predicted_genres:
+            raise HTTPException(400, "Audio file is too short to process")
+        
+        counter = Counter(predicted_genres)
+        total_segments = len(predicted_genres)
+        percentages = {
+            genre: round((count / total_segments) * 100, 2)
+            for genre, count in counter.items()
+        }
+        main_genre = max(percentages, key=percentages.get)
+
+        return JSONResponse(content={
+            "genre": main_genre,
+            "percentages": percentages,
+            "filename": file.filename
+        })
+
+    except Exception as e:
+        raise HTTPException(
+            status_code=500, 
+            detail=f"Error processing audio file: {str(e)}"
+        )
     finally:
-        file.file.close()
+        if tmp_path and os.path.exists(tmp_path):
+            os.unlink(tmp_path)
