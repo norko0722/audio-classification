@@ -36,6 +36,9 @@ async def audio_classification(file: UploadFile = File(...), segment_duration: i
         total_duration = librosa.get_duration(y=audio, sr=sr)
         segment_samples = int(segment_duration * sr)
 
+        rms = librosa.feature.rms(y=audio)[0]
+        rms_timeseries = rms.tolist()
+
         predicted_genres = []
         for i in range(0, len(audio), segment_samples):
             segment = audio[i : i + segment_samples]
@@ -64,7 +67,8 @@ async def audio_classification(file: UploadFile = File(...), segment_duration: i
                 "sample_rate": sr,
                 "total_segments": total_segments,
                 "segment_duration": segment_duration
-            }
+            },
+            "rms_loudness": rms_timeseries
         })
 
     except Exception as e:
