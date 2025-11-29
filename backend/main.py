@@ -33,6 +33,7 @@ async def audio_classification(file: UploadFile = File(...), segment_duration: i
             tmp_path = tmp.name
 
         audio, sr = librosa.load(tmp_path, sr=22050)
+        total_duration = librosa.get_duration(y=audio, sr=sr)
         segment_samples = int(segment_duration * sr)
 
         predicted_genres = []
@@ -57,7 +58,13 @@ async def audio_classification(file: UploadFile = File(...), segment_duration: i
         return JSONResponse(content={
             "genre": main_genre,
             "percentages": percentages,
-            "filename": file.filename
+            "filename": file.filename,
+            "audio_metadata": {
+                "duration": total_duration,
+                "sample_rate": sr,
+                "total_segments": total_segments,
+                "segment_duration": segment_duration
+            }
         })
 
     except Exception as e:
