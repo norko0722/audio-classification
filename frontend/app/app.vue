@@ -3,6 +3,7 @@
     <Header />
     <Home />
     <AboutUs />
+    <Upload />
     <Footer />
   </div>
 </template>
