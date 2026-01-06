@@ -35,10 +35,18 @@ async def audio_classification(file: UploadFile = File(...), segment_duration: i
         )
 
     tmp_path = None
+
+    MAX_FILE_SIZE_MB = 150
     
     try:
         with tempfile.NamedTemporaryFile(delete=False, suffix=".wav") as tmp:
-            tmp.write(await file.read())
+            content = await file.read()
+            if len(content) > MAX_FILE_SIZE_MB * 1024 * 1024:
+                raise HTTPException(
+                    status_code=413,
+                    detail=f"File is too large, the maximum limit is {MAX_FILE_SIZE_MB} MB"
+                )
+            tmp.write(content)
             tmp_path = tmp.name
 
         audio, sr = librosa.load(tmp_path, sr=22050)
