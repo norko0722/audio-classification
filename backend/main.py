@@ -28,7 +28,7 @@ async def audio_classification(file: UploadFile = File(...), segment_duration: i
             status_code=400,
             detail="No file uploaded!"
         )
-    if not file.filename.lower().endswith(".wav"): 
+    if file.content_type not in ["audio/wav", "audio/x-wav"]: 
         raise HTTPException(
             status_code=415,
             detail="File must be in .wav format"
