@@ -322,6 +322,26 @@
       </div>
     </div>
   </div>
+
+  <div class="bg-gray-800 rounded-lg shadow-lg p-6 border border-gray-700 mt-6">
+    <div class="flex items-center gap-3 mb-6">
+      <div class="bg-green-900 p-2 rounded-lg">
+        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-bar-chart-3 text-green-400">
+          <path d="M3 3v18h18"></path>
+          <path d="M18 17V9"></path>
+          <path d="M13 17V5"></path>
+          <path d="M8 17v-3"></path>
+        </svg>
+      </div>
+      <div>
+        <h3 class="text-white">Spectrogram</h3>
+        <p class="text-gray-400">Frequency analysis over time</p>
+      </div>
+    </div>
+    <div class="flex justify-center">
+      <img :src="`data:image/png;base64,${data.spectrogram}`" alt="Spectrogram" class="max-w-full h-auto rounded-lg" />
+    </div>
+  </div>
 </template>
 
 <script setup lang="ts">
@@ -337,6 +357,7 @@ interface Props {
       total_segments: number
       segment_duration: number
     }
+    spectrogram: string
   }
 }
 
