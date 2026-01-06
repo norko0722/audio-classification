@@ -1,5 +1,5 @@
 <template>
-  <div class="bg-gradient-to-br from-green-600 to-emerald-600 rounded-lg shadow-lg p-8 text-white">
+  <div class="bg-gradient-to-br from-green-600 to-emerald-600 rounded-lg shadow-lg p-8 text-white mt-6">
     <div class="flex items-center justify-between">
       <div>
         <p class="text-green-100 mb-2">Primary Genre Detected</p>
@@ -261,7 +261,7 @@
                 </g>
               </g>
               <text offset="-5" x="408.5" y="256" class="recharts-text recharts-label" text-anchor="middle" fill="#9ca3af">
-                <tspan x="408.5" dy="0em">Time (seconds)</tspan>
+                <tspan x="408.5" dy="=5em">Time (seconds)</tspan>
               </text>
             </g>
             <g class="recharts-layer recharts-cartesian-axis recharts-yAxis yAxis">
@@ -299,7 +299,7 @@
                 </g>
               </g>
               <text offset="5" transform="rotate(-90, 10, 113)" x="10" y="113" class="recharts-text recharts-label" text-anchor="start" fill="#9ca3af">
-                <tspan x="10" dy="0.355em">RMS Loudness</tspan>
+                <tspan x="0" dy="0.355em">RMS Loudness</tspan>
               </text>
             </g>
             <g class="recharts-layer recharts-area">
@@ -326,11 +326,8 @@
   <div class="bg-gray-800 rounded-lg shadow-lg p-6 border border-gray-700 mt-6">
     <div class="flex items-center gap-3 mb-6">
       <div class="bg-green-900 p-2 rounded-lg">
-        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-bar-chart-3 text-green-400">
-          <path d="M3 3v18h18"></path>
-          <path d="M18 17V9"></path>
-          <path d="M13 17V5"></path>
-          <path d="M8 17v-3"></path>
+        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-bar-chart text-green-400">
+          <path d="M12 2v20M2 12h20M7 7h10M7 17h10"></path>
         </svg>
       </div>
       <div>
@@ -338,9 +335,7 @@
         <p class="text-gray-400">Frequency analysis over time</p>
       </div>
     </div>
-    <div class="flex justify-center">
-      <img :src="`data:image/png;base64,${data.spectrogram}`" alt="Spectrogram" class="max-w-full h-auto rounded-lg" />
-    </div>
+    <img :src="'data:image/png;base64,' + data.spectrogram" alt="Spectrogram" class="w-full rounded-lg" />
   </div>
 </template>
 
@@ -357,6 +352,7 @@ interface Props {
       total_segments: number
       segment_duration: number
     }
+    rms_loudness: number[]
     spectrogram: string
   }
 }
