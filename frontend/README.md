@@ -1,76 +1,75 @@
-# Frontend - Audio Classification UI
+# Nuxt Minimal Starter
 
-Web UI for audio genre classification.
+Look at the [Nuxt documentation](https://nuxt.com/docs/getting-started/introduction) to learn more.
 
-## Description
+## Setup
 
-Frontend application built with JavaScript and Tailwind CSS that allows users to upload audio files and view classification results. The UI provides an intuitive interface for interacting with the audio classification backend API.
-
-## Getting Started
-
-### Dependencies
-
-Before running the project, make sure you have the following installed:
-
-* Node.js (v18+)
-* npm
-
-### Installing
-
-1. Install dependencies:
-   
-   ```bash
-   npm install
-   ```
-
-## Running
+Make sure to install dependencies:
 
 ```bash
-npm start
-```
-
-Or for development server (if configured):
-```bash
-npm run dev
-```
-
-## Build
-
-```bash
-npm run build
-```
-
-## Technologies
-
-* **Tailwind CSS** - Utility-first CSS framework for styling
-* **PostCSS** - CSS preprocessor
-* **Autoprefixer** - Automatically adds vendor prefixes to CSS
-
-## Project Structure
-
-```
-frontend/
-├── src/                 # Source files (to be created)
-├── public/              # Static files (to be created)
-├── package.json         # npm dependencies
-├── tailwind.config.js   # Tailwind CSS configuration
-├── postcss.config.js    # PostCSS configuration
-└── README.md           # This file
-```
-
-## Configuration
-
-* `tailwind.config.js` - Tailwind CSS configuration
-* `postcss.config.js` - PostCSS configuration with Autoprefixer
-
-## Help
-
-If you encounter errors, try:
-```bash
+# npm
 npm install
+
+# pnpm
+pnpm install
+
+# yarn
+yarn install
+
+# bun
+bun install
 ```
 
-## Authors
+## Development Server
 
-* Norbert Balucha - @norko0722
+Start the development server on `http://localhost:3000`:
 
+```bash
+# npm
+npm run dev
+
+# pnpm
+pnpm dev
+
+# yarn
+yarn dev
+
+# bun
+bun run dev
+```
+
+## Production
+
+Build the application for production:
+
+```bash
+# npm
+npm run build
+
+# pnpm
+pnpm build
+
+# yarn
+yarn build
+
+# bun
+bun run build
+```
+
+Locally preview production build:
+
+```bash
+# npm
+npm run preview
+
+# pnpm
+pnpm preview
+
+# yarn
+yarn preview
+
+# bun
+bun run preview
+```
+
+Check out the [deployment documentation](https://nuxt.com/docs/getting-started/deployment) for more information.
