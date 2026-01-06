@@ -57,14 +57,12 @@ async def audio_classification(file: UploadFile = File(...), segment_duration: i
         total_duration = librosa.get_duration(y=audio, sr=sr)
         segment_samples = int(segment_duration * sr)
 
-        # Generate spectrogram
         fig, ax = plt.subplots(figsize=(10, 4))
         D = librosa.amplitude_to_db(librosa.stft(audio), ref=np.max)
         img = librosa.display.specshow(D, x_axis='time', y_axis='hz', ax=ax, sr=sr)
         fig.colorbar(img, ax=ax, format='%+2.0f dB')
         ax.set_title('Spectrogram')
         
-        # Save to buffer
         buf = io.BytesIO()
         fig.savefig(buf, format='png', bbox_inches='tight')
         buf.seek(0)
