@@ -1,4 +1,5 @@
 from fastapi import FastAPI, UploadFile, File, HTTPException
+from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import JSONResponse
 import librosa
 from collections import Counter
@@ -11,6 +12,14 @@ app = FastAPI()
 @app.get("/")
 async def root():
     return { "message": "Audio Genre Classification Project Norbert Balucha - FastAPI" }
+
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["http://localhost:3000"], 
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
 
 @app.post("/classification")
 async def audio_classification(file: UploadFile = File(...), segment_duration: int = 10):
