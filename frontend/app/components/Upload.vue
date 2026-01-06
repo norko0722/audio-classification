@@ -37,27 +37,59 @@
               </svg>
             </button>
           </div>
-          <button class="px-8 py-3 bg-green-600 text-white rounded-lg hover:bg-green-700 transition-colors disabled:bg-gray-600 disabled:cursor-not-allowed">Classify Genre</button>
+          <button class="px-8 py-3 bg-green-600 text-white rounded-lg hover:bg-green-700 transition-colors disabled:bg-gray-600 disabled:cursor-not-allowed" @click="classifyGenre">Classify Genre</button>
         </div>
       </div>
+      <Results v-if="showResults" :data="resultsData" />
     </div>
   </section>
 </template>
 
 <script setup lang="ts">
 import { ref } from 'vue'
+import Results from './Results.vue'
 
 const uploadedFile = ref<File | null>(null)
+const showResults = ref(false)
+const resultsData = ref<any>(null)
 
 const handleFileSelect = (event: Event) => {
   const target = event.target as HTMLInputElement
   if (target.files && target.files[0]) {
     uploadedFile.value = target.files[0]
+    showResults.value = false
+    resultsData.value = null
   }
 }
 
 const removeFile = () => {
   uploadedFile.value = null
+  showResults.value = false
+  resultsData.value = null
+}
+
+const classifyGenre = async () => {
+  if (!uploadedFile.value) return
+
+  const formData = new FormData()
+  formData.append('file', uploadedFile.value)
+  formData.append('segment_duration', '10')
+
+  try {
+    const response = await fetch('http://localhost:8000/classification', {
+      method: 'POST',
+      body: formData
+    })
+    if (!response.ok) {
+      throw new Error('Classification failed')
+    }
+    const data = await response.json()
+    resultsData.value = data
+    showResults.value = true
+  } catch (error) {
+    console.error('Error classifying genre:', error)
+    // TODO: show error message
+  }
 }
 </script>
 
