@@ -1,4 +1,4 @@
-from fastapi import FastAPI, UploadFile, File, HTTPException
+from fastapi import FastAPI, UploadFile, File, HTTPException, Depends
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import JSONResponse
 import librosa
@@ -10,6 +10,39 @@ from collections import Counter
 from services.model_service import model_service
 import tempfile
 import os
+
+from sqlalchemy.orm import Session
+from database.database import SessionLocal, engine, Base
+from database.models import User
+from passlib.context import CryptContext
+
+
+pwd_context = CryptContext(schemes=["argon2"], deprecated="auto")
+
+Base.metadata.create_all(bind=engine)
+
+def create_test_user():
+    db = SessionLocal()
+    user = db.query(User).filter(User.email == "test@example.com").first()
+    if not user:
+        raw_password = "heslo123"
+
+        raw_password = raw_password[:72]
+        hashed_pswd = pwd_context.hash(raw_password)
+
+        user = User(
+            name="Vincent",
+            surname="Rybansky",
+            email="ryabnsky@test.com",
+            hashed_password=hashed_pswd
+        )
+        db.add(user)
+        db.commit()
+        print("Test user created: rybansky@test.com / heslo123")
+    db.close()
+
+create_test_user()
+
 
 app = FastAPI()
 
