@@ -13,6 +13,14 @@ import os
 
 app = FastAPI()
 
+def get_db():
+    from database.database import SessionLocal
+    db = SessionLocal()
+    try:
+        yield db
+    finally:
+        db.close()
+
 @app.get("/")
 async def root():
     return { "message": "Audio Genre Classification Project Norbert Balucha - FastAPI" }
@@ -24,6 +32,13 @@ app.add_middleware(
     allow_methods=["*"],
     allow_headers=["*"],
 )
+
+@app.post("/sign-in")
+def sign_in(email: str, password: str, db: Session = Depends(get_db)):
+    user_info, error = user_login(email, password, db)
+    if error:
+        raise HTTPException(status_code=400, detail=error)
+    return user_info
 
 @app.post("/classification")
 async def audio_classification(file: UploadFile = File(...), segment_duration: int = 10):
