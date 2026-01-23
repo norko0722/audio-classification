@@ -38,11 +38,12 @@
         <h2 class="text-white text-center mb-2">Welcome Back</h2>
         <p class="text-gray-400 text-center mb-8">Sign in to your account</p>
 
-        <form class="space-y-6">
+        <form @submit.prevent="login" class="space-y-6">
           <div>
             <label for="email" class="block text-gray-300 mb-2">Email</label>
             <input
               id="email"
+              v-model="credentials.email"
               type="email"
               required
               class="w-full px-4 py-3 bg-gray-900 border border-gray-600 rounded-lg text-white placeholder-gray-500 focus:outline-none focus:border-green-500 transition-colors"
@@ -54,6 +55,7 @@
             <label for="password" class="block text-gray-300 mb-2">Password</label>
             <input
               id="password"
+              v-model="credentials.password"
               type="password"
               required
               class="w-full px-4 py-3 bg-gray-900 border border-gray-600 rounded-lg text-white placeholder-gray-500 focus:outline-none focus:border-green-500 transition-colors"
@@ -87,3 +89,20 @@
     </div>
   </div>
 </template>
+
+<script setup lang="ts">
+const { signIn } = useAuth()
+
+const credentials = reactive({
+  email: '',
+  password: '',
+})
+
+async function login() {
+  try {
+    await signIn(credentials, { callbackUrl: '/' })
+  } catch (error) {
+    alert('Bad credentials')
+  }
+}
+</script>
