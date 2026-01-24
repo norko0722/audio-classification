@@ -9,8 +9,9 @@ venv/
 env/
 
 # Frontend
+.nuxt
 node_modules
-dist
+dist/
 .env
 
 .DS_Store 
