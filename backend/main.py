@@ -13,7 +13,7 @@ import os
 
 from sqlalchemy.orm import Session
 from database.database import SessionLocal, engine, Base
-from database.models import User
+from database.models import User, Classification  # pridali sme Classification
 from passlib.context import CryptContext
 
 from pydantic import BaseModel
@@ -28,7 +28,7 @@ Base.metadata.create_all(bind=engine)
 
 def create_test_user():
     db = SessionLocal()
-    test_email = "ryabnsky@test.com"
+    test_email = "rybansky@test.com"
     user = db.query(User).filter(User.email == test_email).first()
     
     if not user:
@@ -50,11 +50,9 @@ def create_test_user():
 
 create_test_user()
 
-
 app = FastAPI()
 
 def get_db():
-    from database.database import SessionLocal
     db = SessionLocal()
     try:
         yield db
@@ -90,7 +88,6 @@ def user_login(email: str, password: str, db: Session):
     }
     return user_info, None
 
-
 @app.post("/sign-in")
 def sign_in(payload: SignInRequest, db: Session = Depends(get_db)):
     user_info, error = user_login(payload.email, payload.password, db)
@@ -99,30 +96,20 @@ def sign_in(payload: SignInRequest, db: Session = Depends(get_db)):
     return user_info
 
 @app.post("/classification")
-async def audio_classification(file: UploadFile = File(...), segment_duration: int = 10):
+async def audio_classification(file: UploadFile = File(...), segment_duration: int = 10, user_id: int = 1, db: Session = Depends(get_db)):
     if not file.filename:
-        raise HTTPException(
-            status_code=400,
-            detail="No file uploaded!"
-        )
-    if file.content_type not in ["audio/wav", "audio/x-wav"]: 
-        raise HTTPException(
-            status_code=415,
-            detail="File must be in .wav format"
-        )
+        raise HTTPException(400, "No file uploaded!")
+    if file.content_type not in ["audio/wav", "audio/x-wav"]:
+        raise HTTPException(415, "File must be in .wav format")
 
     tmp_path = None
-
     MAX_FILE_SIZE_MB = 150
     
     try:
         with tempfile.NamedTemporaryFile(delete=False, suffix=".wav") as tmp:
             content = await file.read()
             if len(content) > MAX_FILE_SIZE_MB * 1024 * 1024:
-                raise HTTPException(
-                    status_code=413,
-                    detail=f"File is too large, the maximum limit is {MAX_FILE_SIZE_MB} MB"
-                )
+                raise HTTPException(413, f"File is too large, max {MAX_FILE_SIZE_MB} MB")
             tmp.write(content)
             tmp_path = tmp.name
 
@@ -141,9 +128,6 @@ async def audio_classification(file: UploadFile = File(...), segment_duration: i
         buf.seek(0)
         spectrogram_base64 = base64.b64encode(buf.read()).decode('utf-8')
         plt.close(fig)
-
-        rms = librosa.feature.rms(y=audio)[0]
-        rms_timeseries = rms.tolist()
 
         predicted_genres = []
         for i in range(0, len(audio), segment_samples):
@@ -164,7 +148,18 @@ async def audio_classification(file: UploadFile = File(...), segment_duration: i
         }
         main_genre = max(percentages, key=percentages.get)
 
+        classification_entry = Classification(
+            file_name=file.filename,
+            genre=main_genre,
+            confidence=percentages[main_genre],
+            user_id=user_id
+        )
+        db.add(classification_entry)
+        db.commit()
+        db.refresh(classification_entry)
+
         return JSONResponse(content={
+            "id": classification_entry.id,
             "genre": main_genre,
             "percentages": percentages,
             "filename": file.filename,
@@ -174,15 +169,15 @@ async def audio_classification(file: UploadFile = File(...), segment_duration: i
                 "total_segments": total_segments,
                 "segment_duration": segment_duration
             },
-            "rms_loudness": rms_timeseries,
+            "rms_loudness": librosa.feature.rms(y=audio)[0].tolist(),
             "spectrogram": spectrogram_base64
         })
 
-    except Exception as e:
-        raise HTTPException(
-            status_code=500, 
-            detail=f"Error processing audio file: {str(e)}"
-        )
     finally:
         if tmp_path and os.path.exists(tmp_path):
             os.unlink(tmp_path)
+
+@app.get("/history/{user_id}")
+def get_classifications_history(user_id: int, skip: int = 0, limit: int = 20, db: Session = Depends(get_db)):
+    classifications = db.query(Classification).filter(Classification.user_id == user_id).offset(skip).limit(limit).all()
+    return classifications
