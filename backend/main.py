@@ -16,6 +16,11 @@ from database.database import SessionLocal, engine, Base
 from database.models import User
 from passlib.context import CryptContext
 
+from pydantic import BaseModel
+
+class SignInRequest(BaseModel):
+    email: str
+    password: str
 
 pwd_context = CryptContext(schemes=["argon2"], deprecated="auto")
 
@@ -23,22 +28,24 @@ Base.metadata.create_all(bind=engine)
 
 def create_test_user():
     db = SessionLocal()
-    user = db.query(User).filter(User.email == "test@example.com").first()
+    test_email = "ryabnsky@test.com"
+    user = db.query(User).filter(User.email == test_email).first()
+    
     if not user:
         raw_password = "heslo123"
-
         raw_password = raw_password[:72]
         hashed_pswd = pwd_context.hash(raw_password)
 
         user = User(
             name="Vincent",
             surname="Rybansky",
-            email="ryabnsky@test.com",
+            email=test_email,
             hashed_password=hashed_pswd
         )
         db.add(user)
         db.commit()
-        print("Test user created: rybansky@test.com / heslo123")
+        print("Test user created:", test_email, "/ heslo123")
+
     db.close()
 
 create_test_user()
@@ -66,9 +73,27 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
+def user_login(email: str, password: str, db: Session):
+    user = db.query(User).filter(User.email == email).first()
+    if not user:
+        return None, "User not found"
+    
+    if not pwd_context.verify(password, user.hashed_password):
+        return None, "Invalid password"
+    
+    user_info = {
+        "id": user.id,
+        "name": user.name,
+        "surname": user.surname,
+        "email": user.email,
+        "token": "mock-jwt-token"
+    }
+    return user_info, None
+
+
 @app.post("/sign-in")
-def sign_in(email: str, password: str, db: Session = Depends(get_db)):
-    user_info, error = user_login(email, password, db)
+def sign_in(payload: SignInRequest, db: Session = Depends(get_db)):
+    user_info, error = user_login(payload.email, payload.password, db)
     if error:
         raise HTTPException(status_code=400, detail=error)
     return user_info
