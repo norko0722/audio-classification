@@ -1,2 +1,0 @@
-import { DefaultRefreshHandler } from '/home/norbert/finish-school-project/audio-classification/frontend/node_modules/@sidebase/nuxt-auth/dist/runtime/utils/refreshHandler'
-export const _refreshHandler = new DefaultRefreshHandler({"enablePeriodically":false,"enableOnWindowFocus":true})
