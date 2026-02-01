@@ -29,11 +29,6 @@
                         <h1 class="text-white text-4xl">AI Audio Genre</h1>                    
                     </div>
                 </div>
-                <nav class="hidden md:flex gap-8 absolute left-1/2 transform -translate-x-1/2" >
-                    <a href="#home" class="text-gray-300 hover:text-green-400 transition-colors" >Home</a>
-                    <a href="#about" class="text-gray-300 hover:text-green-400 transition-colors" >About us</a>
-                    <a href="#upload" class="text-gray-300 hover:text-green-400 transition-colors" >Upload</a>
-                </nav>
                 <div class="flex items-center gap-2">
                     <NuxtLink to="/signin" class="px-4 py-2 text-gray-300 hover:text-green-400 transition-colors">
                         Sign In
