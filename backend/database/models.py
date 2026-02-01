@@ -12,15 +12,15 @@ class User(Base):
     email = Column(String, unique=True, index=True, nullable=False)
     hashed_password = Column(String, nullable=False)
     created_at = Column(DateTime(timezone=True), server_default=func.now())
-    classifications = relationship("Classification", back_populates="user")  # vzťah k Classification
+    classifications = relationship("Classification", back_populates="user")  
 
 class Classification(Base):
     __tablename__ = "classifications"
 
     id = Column(Integer, primary_key=True, index=True)
     filename = Column(String, nullable=False)
-    primary_genre = Column(String, nullable=False)
-    genre_probabilities = Column(String, nullable=True)  # uložené ako JSON string
+    genre = Column(String, nullable=False)
+    confidence = Column(String, nullable=True) 
     duration = Column(Float, nullable=True)
     sample_rate = Column(Integer, nullable=True)
     created_at = Column(DateTime(timezone=True), server_default=func.now())
