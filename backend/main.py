@@ -151,9 +151,12 @@ async def audio_classification(file: UploadFile = File(...), segment_duration: i
         classification_entry = Classification(
             filename=file.filename,
             genre=main_genre,
-            confidence=percentages[main_genre],
+            confidence=str(percentages[main_genre]),
+            duration=total_duration,
+            sample_rate=sr,
             user_id=user_id
         )
+
         db.add(classification_entry)
         db.commit()
         db.refresh(classification_entry)
