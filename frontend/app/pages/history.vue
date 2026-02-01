@@ -1,6 +1,6 @@
 <template>
   <div class="min-h-screen bg-gradient-to-br from-gray-900 via-gray-800 to-gray-900">
-    <header class="bg-gray-800 shadow-lg sticky top-0 z-50 border-b border-gray-700">
+    <!-- <header class="bg-gray-800 shadow-lg sticky top-0 z-50 border-b border-gray-700">
       <div class="max-w-7xl mx-auto px-4 py-4 flex items-center justify-between">
         <div class="flex items-center gap-2">
           <div class="bg-gradient-to-br from-green-600 to-emerald-600 p-2 rounded-lg">
@@ -18,8 +18,16 @@
         </div>
 
         <nav class="hidden md:flex gap-8 absolute left-1/2 transform -translate-x-1/2">
-          <button @click="goToClassify" class="transition-colors text-green-400">Classify</button>
-          <button  @click="goToHistory" class="transition-colors text-gray-300 hover:text-green-400">History</button>
+          <button 
+            @click="goToClassify" 
+            class="transition-colors"
+            :class="{'text-green-400': $route.path === '/classify', 'text-gray-300': $route.path !== '/classify'}"
+          >Classify</button>
+        <button 
+            @click="goToHistory" 
+            class="transition-colors"
+            :class="{'text-green-400': $route.path === '/history', 'text-gray-300': $route.path !== '/history'}"
+          >History</button>
         </nav>
 
         <div class="flex items-center gap-4">
@@ -34,7 +42,9 @@
           </button>
         </div>
       </div>
-    </header>
+    </header> -->
+
+    <Header />
 
     <main class="max-w-7xl mx-auto px-4 py-8">
       <div class="mb-8">
@@ -109,9 +119,6 @@
 
   const router = useRouter()
 
-  const goToHistory = () => router.push('/history')
-  const goToClassify = () => router.push('/classify')
-
   const history = ref([])
   const loading = ref(false)
   const error = ref(null)
@@ -129,11 +136,6 @@
     } finally {
       loading.value = false
     }
-  }
-
-  const signOut = () => {
-    localStorage.removeItem('authToken') 
-    router.push('/sign-in')
   }
 
   onMounted(() => {
