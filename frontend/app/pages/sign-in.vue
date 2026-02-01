@@ -151,88 +151,125 @@
   }
 </script> -->
 
- <template>
-  <header class="bg-gray-800 shadow-lg sticky top-0 z-50 border-b border-gray-700">
-    <div class="max-w-7xl mx-auto px-2 sm:px-4 lg:px-6 py-4">
-      <div class="flex items-center justify-between">
-        <div class="flex items-center gap-2">
-          <div class="bg-gradient-to-br from-green-600 to-emerald-600 p-2 rounded-lg">
-            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" class="text-white">
-              <g>
-                <path d="M12 2C6.48 2 2 6.48 2 12C2 17.52 6.48 22 12 22" stroke="currentColor" stroke-width="1.5" fill="none"/>
-                <circle cx="12" cy="12" r="1.5" fill="currentColor"/>
-              </g>
-            </svg>
+<template>
+  <div class="min-h-screen bg-gray-900 flex items-center justify-center px-4">
+    <div class="w-full max-w-md">
+      <div class="bg-gray-800 rounded-lg shadow-xl p-8 border border-gray-700">
+        <h2 class="text-white text-center mb-2">Welcome Back</h2>
+        <p class="text-gray-400 text-center mb-8">Sign in to your account</p>
+        <form @submit.prevent="signIn" class="space-y-6">
+          <div>
+            <label for="email" class="block text-gray-300 mb-2">Email</label>
+            <input
+              id="email"
+              type="email"
+              v-model="state.email"
+              @blur="touched.email = true; validateField('email')"
+              @input="validateField('email')"
+              :class="['w-full px-4 py-3 rounded-lg focus:outline-none transition-colors border', 
+                errors.email && touched.email ? 'border-red-500' : 'border-gray-600', 
+                'bg-gray-900 text-white placeholder-gray-500 focus:border-green-500']"
+              placeholder="your@email.com"
+            />
+            <p v-if="errors.email && touched.email" class="text-red-500 text-sm mt-1">{{ errors.email }}</p>
           </div>
-          <div class="ml-1">
-            <h1 class="text-white text-4xl">AI Audio Genre</h1>
+          <div>
+            <label for="password" class="block text-gray-300 mb-2">Password</label>
+            <input
+              id="password"
+              type="password"
+              v-model="state.password"
+              @blur="touched.password = true; validateField('password')"
+              @input="validateField('password')"
+              :class="['w-full px-4 py-3 rounded-lg focus:outline-none transition-colors border',
+                errors.password && touched.password ? 'border-red-500' : 'border-gray-600',
+                'bg-gray-900 text-white placeholder-gray-500 focus:border-green-500']"
+              placeholder="••••••••"
+            />
+            <p v-if="errors.password && touched.password" class="text-red-500 text-sm mt-1">{{ errors.password }}</p>
           </div>
-        </div>
-
-        <div class="flex items-center gap-4">
-          <template v-if="isLoggedIn">
-            <!-- Navbar pre prihláseného -->
-            <nav class="hidden md:flex gap-8">
-              <NuxtLink
-                to="/classify"
-                class="transition-colors"
-                :class="{'text-green-400': route.path === '/classify', 'text-gray-300': route.path !== '/classify'}"
-              >Classify</NuxtLink>
-              <NuxtLink
-                to="/history"
-                class="transition-colors"
-                :class="{'text-green-400': route.path === '/history', 'text-gray-300': route.path !== '/history'}"
-              >History</NuxtLink>
-            </nav>
-            <span class="text-green-400 font-medium">{{ username }}</span>
-            <button
-              @click="signOut"
-              class="px-4 py-2 bg-gradient-to-r from-green-600 to-emerald-600 text-white rounded-lg hover:from-green-700 hover:to-emerald-700 transition-all"
-            >
-              Sign Out
-            </button>
-          </template>
-
-          <template v-else>
-            <NuxtLink to="/sign-in" class="px-4 py-2 text-gray-300 hover:text-green-400 transition-colors">
-              Sign In
-            </NuxtLink>
-            <NuxtLink to="/sign-up" class="px-6 py-2 bg-gradient-to-r from-green-600 to-emerald-600 text-white rounded-lg hover:from-green-700 hover:to-emerald-700 transition-all">
-              Sign Up
-            </NuxtLink>
-          </template>
-        </div>
+          <p v-if="errors.general" class="text-red-500 text-sm mt-1 text-center">{{ errors.general }}</p>
+          <button
+            type="submit"
+            class="w-full px-6 py-3 bg-gradient-to-r from-green-600 to-emerald-600 text-white rounded-lg hover:from-green-700 hover:to-emerald-700 transition-all shadow-lg"
+          >
+            Sign In
+          </button>
+        </form>
       </div>
     </div>
-  </header>
+  </div>
 </template>
 
 <script setup lang="ts">
-  import { ref, onMounted } from 'vue'
-  import { useRouter, useRoute } from 'vue-router'
+import { reactive } from 'vue'
+import { useRouter } from 'vue-router'
 
-  const router = useRouter()
-  const route = useRoute()
+const router = useRouter()
 
-  const isLoggedIn = ref(false)
-  const username = ref('')
+const state = reactive({
+  email: '',
+  password: ''
+})
 
-  onMounted(() => {
-    const userStr = localStorage.getItem('user')
-    if (userStr) {
-      const user = JSON.parse(userStr)
-      username.value = user.username || 'User'
-      isLoggedIn.value = true
-    }
-  })
+const errors = reactive({
+  email: '',
+  password: '',
+  general: ''
+})
 
-  const signOut = () => {
-    if (process.client) {
-      localStorage.removeItem('user')
-      localStorage.removeItem('token')
-    }
-    isLoggedIn.value = false
-    router.push('/sign-in')
+const touched = reactive({
+  email: false,
+  password: false
+})
+
+function validateField(field: 'email' | 'password') {
+  if (field === 'email') {
+    if (!state.email) errors.email = 'Email is required'
+    else if (!/^[\w-.]+@([\w-]+\.)+[\w-]{2,4}$/.test(state.email)) errors.email = 'Email must be valid'
+    else errors.email = ''
   }
+  if (field === 'password') {
+    if (!state.password) errors.password = 'Password is required'
+    else errors.password = ''
+  }
+}
+
+function validateAll() {
+  touched.email = true
+  touched.password = true
+  validateField('email')
+  validateField('password')
+  return !errors.email && !errors.password
+}
+
+async function signIn() {
+  if (!validateAll()) return
+
+  try {
+    const response = await fetch('http://localhost:8000/sign-in', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(state)
+    })
+
+    if (!response.ok) {
+      const errorData = await response.json()
+      throw new Error(errorData.detail || 'Invalid email or password')
+    }
+
+    const data = await response.json()
+
+    if (process.client) {
+      localStorage.setItem('user', JSON.stringify(data))
+      if (data.token) localStorage.setItem('token', data.token)
+    }
+
+    await router.push('/classify')
+  } catch (err: any) {
+    errors.general = err.message
+  }
+}
 </script>
+
 
