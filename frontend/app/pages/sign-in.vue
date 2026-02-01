@@ -1,4 +1,4 @@
-<template>
+<!-- <template>
   <div class="min-h-screen bg-gray-900 flex items-center justify-center px-4">
     <div class="w-full max-w-md">
       <NuxtLink to="/" class="flex items-center gap-2 text-gray-400 hover:text-green-400 transition-colors mb-8">
@@ -149,10 +149,90 @@
       errors.general = err.message
     }
   }
+</script> -->
+
+ <template>
+  <header class="bg-gray-800 shadow-lg sticky top-0 z-50 border-b border-gray-700">
+    <div class="max-w-7xl mx-auto px-2 sm:px-4 lg:px-6 py-4">
+      <div class="flex items-center justify-between">
+        <div class="flex items-center gap-2">
+          <div class="bg-gradient-to-br from-green-600 to-emerald-600 p-2 rounded-lg">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" class="text-white">
+              <g>
+                <path d="M12 2C6.48 2 2 6.48 2 12C2 17.52 6.48 22 12 22" stroke="currentColor" stroke-width="1.5" fill="none"/>
+                <circle cx="12" cy="12" r="1.5" fill="currentColor"/>
+              </g>
+            </svg>
+          </div>
+          <div class="ml-1">
+            <h1 class="text-white text-4xl">AI Audio Genre</h1>
+          </div>
+        </div>
+
+        <div class="flex items-center gap-4">
+          <template v-if="isLoggedIn">
+            <!-- Navbar pre prihláseného -->
+            <nav class="hidden md:flex gap-8">
+              <NuxtLink
+                to="/classify"
+                class="transition-colors"
+                :class="{'text-green-400': route.path === '/classify', 'text-gray-300': route.path !== '/classify'}"
+              >Classify</NuxtLink>
+              <NuxtLink
+                to="/history"
+                class="transition-colors"
+                :class="{'text-green-400': route.path === '/history', 'text-gray-300': route.path !== '/history'}"
+              >History</NuxtLink>
+            </nav>
+            <span class="text-green-400 font-medium">{{ username }}</span>
+            <button
+              @click="signOut"
+              class="px-4 py-2 bg-gradient-to-r from-green-600 to-emerald-600 text-white rounded-lg hover:from-green-700 hover:to-emerald-700 transition-all"
+            >
+              Sign Out
+            </button>
+          </template>
+
+          <template v-else>
+            <NuxtLink to="/sign-in" class="px-4 py-2 text-gray-300 hover:text-green-400 transition-colors">
+              Sign In
+            </NuxtLink>
+            <NuxtLink to="/sign-up" class="px-6 py-2 bg-gradient-to-r from-green-600 to-emerald-600 text-white rounded-lg hover:from-green-700 hover:to-emerald-700 transition-all">
+              Sign Up
+            </NuxtLink>
+          </template>
+        </div>
+      </div>
+    </div>
+  </header>
+</template>
+
+<script setup lang="ts">
+  import { ref, onMounted } from 'vue'
+  import { useRouter, useRoute } from 'vue-router'
+
+  const router = useRouter()
+  const route = useRoute()
+
+  const isLoggedIn = ref(false)
+  const username = ref('')
+
+  onMounted(() => {
+    const userStr = localStorage.getItem('user')
+    if (userStr) {
+      const user = JSON.parse(userStr)
+      username.value = user.username || 'User'
+      isLoggedIn.value = true
+    }
+  })
+
+  const signOut = () => {
+    if (process.client) {
+      localStorage.removeItem('user')
+      localStorage.removeItem('token')
+    }
+    isLoggedIn.value = false
+    router.push('/sign-in')
+  }
 </script>
-
-
-
-
-
 

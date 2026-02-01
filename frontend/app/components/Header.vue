@@ -45,7 +45,7 @@
   <header class="bg-gray-800 shadow-lg sticky top-0 z-50 border-b border-gray-700">
     <div class="max-w-7xl mx-auto px-2 sm:px-4 lg:px-6 py-4">
       <div class="flex items-center justify-between">
-        <!-- Logo -->
+        <!-- Logo a názov -->
         <div class="flex items-center gap-2">
           <div class="bg-gradient-to-br from-green-600 to-emerald-600 p-2 rounded-lg">
             <svg width="24" height="24" viewBox="0 0 24 24" fill="none" class="text-white">
@@ -68,15 +68,14 @@
               <NuxtLink
                 to="/classify"
                 class="transition-colors"
-                :class="{'text-green-400': currentRoute === '/classify', 'text-gray-300': currentRoute !== '/classify'}"
+                :class="{'text-green-400': route.path === '/classify', 'text-gray-300': route.path !== '/classify'}"
               >Classify</NuxtLink>
               <NuxtLink
                 to="/history"
                 class="transition-colors"
-                :class="{'text-green-400': currentRoute === '/history', 'text-gray-300': currentRoute !== '/history'}"
+                :class="{'text-green-400': route.path === '/history', 'text-gray-300': route.path !== '/history'}"
               >History</NuxtLink>
             </nav>
-
             <span class="text-green-400 font-medium">{{ username }}</span>
             <button
               @click="signOut"
@@ -90,9 +89,9 @@
             <NuxtLink to="/sign-in" class="px-4 py-2 text-gray-300 hover:text-green-400 transition-colors">
               Sign In
             </NuxtLink>
-            <button class="px-6 py-2 bg-gradient-to-r from-green-600 to-emerald-600 text-white rounded-lg hover:from-green-700 hover:to-emerald-700 transition-all">
+            <NuxtLink to="/sign-up" class="px-6 py-2 bg-gradient-to-r from-green-600 to-emerald-600 text-white rounded-lg hover:from-green-700 hover:to-emerald-700 transition-all">
               Sign Up
-            </button>
+            </NuxtLink>
           </template>
         </div>
       </div>
@@ -100,7 +99,7 @@
   </header>
 </template>
 
-<script setup>
+<script setup lang="ts">
     import { ref, onMounted } from 'vue'
     import { useRouter, useRoute } from 'vue-router'
 
@@ -109,26 +108,25 @@
 
     const isLoggedIn = ref(false)
     const username = ref('')
-    const currentRoute = ref('')
-
-    // Sign out
-    const signOut = () => {
-    if (process.client) {
-        localStorage.removeItem('authToken')
-        localStorage.removeItem('authUsername')
-    }
-    router.push('/sign-in')
-    }
 
     onMounted(() => {
-    if (process.client) {
-        const token = localStorage.getItem('authToken')
-        const storedUsername = localStorage.getItem('authUsername')
-        isLoggedIn.value = !!token
-        username.value = storedUsername || 'User'
+    const userStr = localStorage.getItem('user')
+    if (userStr) {
+        const user = JSON.parse(userStr)
+        username.value = user.username || 'User'
+        isLoggedIn.value = true
     }
-    currentRoute.value = route.path
     })
+
+    const signOut = () => {
+    if (process.client) {
+        localStorage.removeItem('user')
+        localStorage.removeItem('token')
+    }
+    isLoggedIn.value = false
+    router.push('/sign-in')
+    }
 </script>
+
 
 
