@@ -202,74 +202,74 @@
 </template>
 
 <script setup lang="ts">
-import { reactive } from 'vue'
-import { useRouter } from 'vue-router'
+  import { reactive } from 'vue'
+  import { useRouter } from 'vue-router'
 
-const router = useRouter()
+  const router = useRouter()
 
-const state = reactive({
-  email: '',
-  password: ''
-})
+  const state = reactive({
+    email: '',
+    password: ''
+  })
 
-const errors = reactive({
-  email: '',
-  password: '',
-  general: ''
-})
+  const errors = reactive({
+    email: '',
+    password: '',
+    general: ''
+  })
 
-const touched = reactive({
-  email: false,
-  password: false
-})
+  const touched = reactive({
+    email: false,
+    password: false
+  })
 
-function validateField(field: 'email' | 'password') {
-  if (field === 'email') {
-    if (!state.email) errors.email = 'Email is required'
-    else if (!/^[\w-.]+@([\w-]+\.)+[\w-]{2,4}$/.test(state.email)) errors.email = 'Email must be valid'
-    else errors.email = ''
-  }
-  if (field === 'password') {
-    if (!state.password) errors.password = 'Password is required'
-    else errors.password = ''
-  }
-}
-
-function validateAll() {
-  touched.email = true
-  touched.password = true
-  validateField('email')
-  validateField('password')
-  return !errors.email && !errors.password
-}
-
-async function signIn() {
-  if (!validateAll()) return
-
-  try {
-    const response = await fetch('http://localhost:8000/sign-in', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify(state)
-    })
-
-    if (!response.ok) {
-      const errorData = await response.json()
-      throw new Error(errorData.detail || 'Invalid email or password')
+  function validateField(field: 'email' | 'password') {
+    if (field === 'email') {
+      if (!state.email) errors.email = 'Email is required'
+      else if (!/^[\w-.]+@([\w-]+\.)+[\w-]{2,4}$/.test(state.email)) errors.email = 'Email must be valid'
+      else errors.email = ''
     }
-
-    const data = await response.json()
-
-    if (process.client) {
-      localStorage.setItem('user', JSON.stringify(data))
-      if (data.token) localStorage.setItem('token', data.token)
+    if (field === 'password') {
+      if (!state.password) errors.password = 'Password is required'
+      else errors.password = ''
     }
-
-    await router.push('/classify')
-  } catch (err: any) {
-    errors.general = err.message
   }
-}
+
+  function validateAll() {
+    touched.email = true
+    touched.password = true
+    validateField('email')
+    validateField('password')
+    return !errors.email && !errors.password
+  }
+
+  async function signIn() {
+    if (!validateAll()) return
+
+    try {
+      const response = await fetch('http://localhost:8000/sign-in', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(state)
+      })
+
+      if (!response.ok) {
+        const errorData = await response.json()
+        throw new Error(errorData.detail || 'Invalid email or password')
+      }
+
+      const data = await response.json()
+      localStorage.setItem('token', data.token || '')
+
+      if (process.client) {
+        router.push('/classify')
+      }
+
+    } catch (err: any) {
+      errors.general = err.message
+    }
+  }
+
 </script>
 
 
