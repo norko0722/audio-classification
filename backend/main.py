@@ -13,7 +13,7 @@ import os
 
 from sqlalchemy.orm import Session
 from database.database import SessionLocal, engine, Base
-from database.models import User, Classification  # pridali sme Classification
+from database.models import User, Classification
 from passlib.context import CryptContext
 
 from pydantic import BaseModel
@@ -149,7 +149,7 @@ async def audio_classification(file: UploadFile = File(...), segment_duration: i
         main_genre = max(percentages, key=percentages.get)
 
         classification_entry = Classification(
-            file_name=file.filename,
+            filename=file.filename,
             genre=main_genre,
             confidence=percentages[main_genre],
             user_id=user_id
