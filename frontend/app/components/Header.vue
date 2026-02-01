@@ -45,6 +45,7 @@
   <header class="bg-gray-800 shadow-lg sticky top-0 z-50 border-b border-gray-700">
     <div class="max-w-7xl mx-auto px-2 sm:px-4 lg:px-6 py-4">
       <div class="flex items-center justify-between">
+        <!-- Logo -->
         <div class="flex items-center gap-2">
           <div class="bg-gradient-to-br from-green-600 to-emerald-600 p-2 rounded-lg">
             <svg width="24" height="24" viewBox="0 0 24 24" fill="none" class="text-white">
@@ -59,20 +60,23 @@
           </div>
         </div>
 
+        <!-- Navbar alebo Sign In/Up -->
         <div class="flex items-center gap-4">
           <template v-if="isLoggedIn">
+            <!-- Navbar pre prihláseného -->
             <nav class="hidden md:flex gap-8">
               <NuxtLink
                 to="/classify"
                 class="transition-colors"
-                :class="{'text-green-400 font-semibold': $route.path === '/classify', 'text-gray-300': $route.path !== '/classify'}"
+                :class="{'text-green-400': currentRoute === '/classify', 'text-gray-300': currentRoute !== '/classify'}"
               >Classify</NuxtLink>
               <NuxtLink
                 to="/history"
                 class="transition-colors"
-                :class="{'text-green-400 font-semibold': $route.path === '/history', 'text-gray-300': $route.path !== '/history'}"
+                :class="{'text-green-400': currentRoute === '/history', 'text-gray-300': currentRoute !== '/history'}"
               >History</NuxtLink>
             </nav>
+
             <span class="text-green-400 font-medium">{{ username }}</span>
             <button
               @click="signOut"
@@ -97,15 +101,34 @@
 </template>
 
 <script setup>
-    import { computed } from 'vue'
-    import { useRouter } from 'vue-router'
+    import { ref, onMounted } from 'vue'
+    import { useRouter, useRoute } from 'vue-router'
 
     const router = useRouter()
+    const route = useRoute()
 
-    const isLoggedIn = computed(() => !!localStorage.getItem('authToken'))
+    const isLoggedIn = ref(false)
+    const username = ref('')
+    const currentRoute = ref('')
 
+    // Sign out
     const signOut = () => {
+    if (process.client) {
         localStorage.removeItem('authToken')
-        router.push('/sign-in')
+        localStorage.removeItem('authUsername')
     }
+    router.push('/sign-in')
+    }
+
+    onMounted(() => {
+    if (process.client) {
+        const token = localStorage.getItem('authToken')
+        const storedUsername = localStorage.getItem('authUsername')
+        isLoggedIn.value = !!token
+        username.value = storedUsername || 'User'
+    }
+    currentRoute.value = route.path
+    })
 </script>
+
+
