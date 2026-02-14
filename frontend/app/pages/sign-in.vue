@@ -202,73 +202,78 @@
           </button>
         </form>
       </div>
-      <p v-if="errors.general" class="text-red-500 text-sm mt-1 text-center">{{ errors.general }}</p>
+      <p v-if="errors.general" class="text-red-500 text-sm mt-10 text-center">{{ errors.general }}</p>
     </div>
   </div>
 </template>
 
 <script setup lang="ts">
-import { reactive } from 'vue'
-import { useRouter } from 'vue-router'
+  import { reactive } from 'vue'
+  import { useRouter } from 'vue-router'
 
-const router = useRouter()
+  const router = useRouter()
 
-const state = reactive({
-  email: '',
-  password: ''
-})
+  const state = reactive({
+    email: '',
+    password: ''
+  })
 
-const errors = reactive({
-  email: '',
-  password: '',
-  general: ''
-})
+  const errors = reactive({
+    email: '',
+    password: '',
+    general: ''
+  })
 
-const touched = reactive({
-  email: false,
-  password: false
-})
+  const touched = reactive({
+    email: false,
+    password: false
+  })
 
-function validateField(field: 'email' | 'password') {
-  if (field === 'email') {
-    if (!state.email) errors.email = 'Email is required'
-    else if (!/^[\w-.]+@([\w-]+\.)+[\w-]{2,4}$/.test(state.email)) errors.email = 'Email must be valid'
-    else errors.email = ''
+  function validateField(field: 'email' | 'password') {
+    if (field === 'email') {
+      if (!state.email) errors.email = 'Email is required'
+      else if (!/^[\w-.]+@([\w-]+\.)+[\w-]{2,4}$/.test(state.email)) errors.email = 'Email must be valid'
+      else errors.email = ''
+    }
+    if (field === 'password') {
+      if (!state.password) errors.password = 'Password is required'
+      else errors.password = ''
+    }
   }
-  if (field === 'password') {
-    if (!state.password) errors.password = 'Password is required'
-    else errors.password = ''
+
+  function validateAll() {
+    touched.email = true
+    touched.password = true
+    validateField('email')
+    validateField('password')
+    return !errors.email && !errors.password
   }
-}
 
-function validateAll() {
-  touched.email = true
-  touched.password = true
-  validateField('email')
-  validateField('password')
-  return !errors.email && !errors.password
-}
+  async function signIn() {
+    if (!validateAll()) return
 
-async function signIn() {
-  if (!validateAll()) return
+    try {
+      const response = await fetch('http://localhost:8000/sign-in', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(state)
+      })
 
-  try {
-    const response = await fetch('http://localhost:8000/sign-in', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify(state)
-    })
+      const data = await response.json()
 
-    if (!response.ok) throw new Error('Invalid email or password')
+      if (!response.ok) {
+        throw new Error(data.detail || 'Invalid email or password')
+      }
 
-    const data = await response.json()
-    localStorage.setItem('token', data.token || '')
+      localStorage.setItem('user', JSON.stringify(data))
+      if (data.token) localStorage.setItem('token', data.token)
 
-    router.push('/classify')
-  } catch (err: any) {
-    errors.general = err.message
+      router.push('/classify')
+
+    } catch (err: any) {
+      errors.general = err.message
+    }
   }
-}
 </script>
 
 
