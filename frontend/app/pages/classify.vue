@@ -78,8 +78,8 @@
     }
 
     function signOut() {
-    localStorage.removeItem('token')
-    localStorage.removeItem('user')
-    router.push('/sign-in')
+        localStorage.removeItem('token')
+        localStorage.removeItem('user')
+        router.push('/sign-in')
     }
 </script>
