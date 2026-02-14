@@ -209,7 +209,7 @@
 
 <script setup lang="ts">
   import { reactive } from 'vue'
-  import { useRouter } from 'vue-router'
+  import { useRouter } from '#app'
 
   const router = useRouter()
 
@@ -268,7 +268,7 @@
       localStorage.setItem('user', JSON.stringify(data))
       if (data.token) localStorage.setItem('token', data.token)
 
-      router.push('/classify')
+      await router.push('/classify')
 
     } catch (err: any) {
       errors.general = err.message
