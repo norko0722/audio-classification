@@ -154,6 +154,12 @@
 <template>
   <div class="min-h-screen bg-gray-900 flex items-center justify-center px-4">
     <div class="w-full max-w-md">
+      <NuxtLink to="/" class="flex items-center gap-2 text-gray-400 hover:text-green-400 transition-colors mb-8">
+        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-arrow-left">
+          <path d="m12 19-7-7 7-7"></path> 
+          <path d="M19 12H5"></path> 
+        </svg> Back to Home 
+      </NuxtLink>
       <div class="bg-gray-800 rounded-lg shadow-xl p-8 border border-gray-700">
         <h2 class="text-white text-center mb-2">Welcome Back</h2>
         <p class="text-gray-400 text-center mb-8">Sign in to your account</p>
