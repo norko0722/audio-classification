@@ -111,37 +111,38 @@
 </template>
 
 <script setup>
+  import { ref, computed, onMounted } from 'vue'
   import { useRouter, useRoute } from 'vue-router'
+
   const userName = ref('')
+  const history = ref([])
+  const loading = ref(false)
+  const error = ref(null)
 
   const userString = localStorage.getItem('user')
-
   if (userString) {
-      const user = JSON.parse(userString)
-      userName.value = user.name
-      console.log(userName)
+    const user = JSON.parse(userString)
+    userName.value = user.name
   }
 
   const router = useRouter()
   const route = useRoute()
 
   function goToClassify() {
-    if (route.path !== '/classify') {
-      router.push('/classify')
-    }
+    if (route.path !== '/classify') router.push('/classify')
   }
 
   function goToHistory() {
-    if (route.path !== '/history') {
-      router.push('/history')
-    }
+    if (route.path !== '/history') router.push('/history')
   }
 
+  const filteredHistory = computed(() => history.value)
+
   const fetchHistory = async () => {
-  loading.value = true
-  error.value = null
-  try {
-      const res = await $fetch('/history') 
+    loading.value = true
+    error.value = null
+    try {
+      const res = await $fetch('/history')
       history.value = res
     } catch (err) {
       console.error(err)
@@ -151,9 +152,7 @@
     }
   }
 
-  onMounted(() => {
-    fetchHistory()
-  })
+  onMounted(() => fetchHistory())
 
   function signOut() {
     localStorage.removeItem('token')
