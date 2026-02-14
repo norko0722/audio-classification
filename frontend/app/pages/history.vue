@@ -1,6 +1,6 @@
 <template>
   <div class="min-h-screen bg-gradient-to-br from-gray-900 via-gray-800 to-gray-900">
-    <!-- <header class="bg-gray-800 shadow-lg sticky top-0 z-50 border-b border-gray-700">
+    <header class="bg-gray-800 shadow-lg sticky top-0 z-50 border-b border-gray-700">
       <div class="max-w-7xl mx-auto px-4 py-4 flex items-center justify-between">
         <div class="flex items-center gap-2">
           <div class="bg-gradient-to-br from-green-600 to-emerald-600 p-2 rounded-lg">
@@ -42,9 +42,7 @@
           </button>
         </div>
       </div>
-    </header> -->
-
-    <Header />
+    </header>
 
     <main class="max-w-7xl mx-auto px-4 py-8">
       <div class="mb-8">

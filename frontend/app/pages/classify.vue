@@ -1,6 +1,6 @@
 <template>
     <div class="min-h-screen bg-gradient-to-br from-gray-900 via-gray-800 to-gray-900">
-        <!-- <header class="bg-gray-800 shadow-lg sticky top-0 z-50 border-b border-gray-700">
+        <header class="bg-gray-800 shadow-lg sticky top-0 z-50 border-b border-gray-700">
             <div class="max-w-7xl mx-auto px-2 sm:px-4 lg:px-6 py-4">
             <div class="flex items-center justify-between">
                 <div class="flex items-center gap-2">
@@ -44,8 +44,7 @@
                 </div>
             </div>
             </div>
-        </header> -->
-        <Header />
+        </header>
         <Upload />
     </div>
 </template>
