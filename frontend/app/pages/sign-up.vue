@@ -91,6 +91,9 @@
             </div>
           </div>
         </div>
+        <p v-if="successMessage" class="text-green-500 text-sm mt-4 text-center">
+            {{ successMessage }}
+        </p>
       </div>
     </div>
   </div>
