@@ -52,7 +52,7 @@
 
       <div v-if="loading" class="text-gray-400">Loading...</div>
       <div v-if="error" class="text-red-400">{{ error }}</div>
-      <div v-if="!loading && filteredHistory.length === 0" class="text-gray-400">No classifications yet.</div>
+      <div v-if="!loading && filteredHistory.length" class="text-gray-400">No classifications yet.</div>
 
       <div class="space-y-4">
         <div
@@ -119,11 +119,13 @@
   const loading = ref(false)
   const error = ref(null)
 
-  const userString = localStorage.getItem('user')
-  if (userString) {
-    const user = JSON.parse(userString)
-    userName.value = user.name
-  }
+  onMounted(() => {
+    const userString = localStorage.getItem('user')
+    if (userString) {
+      const user = JSON.parse(userString)
+      userName.value = user.name
+    }
+  })
 
   const router = useRouter()
   const route = useRoute()
@@ -142,7 +144,7 @@
     loading.value = true
     error.value = null
     try {
-      const res = await $fetch('/history')
+      const res = await $fetch('http://localhost:8000/history')
       history.value = res
     } catch (err) {
       console.error(err)
