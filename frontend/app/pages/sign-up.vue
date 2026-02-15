@@ -20,15 +20,15 @@
                   <input
                     id="name"
                     type="text"
-                    v-model="state.name"
-                    @blur="touched.name = true; validateField('name')"
-                    @input="validateField('name')"
+                    v-model="state.username"
+                    @blur="touched.username = true; validateField('username')"
+                    @input="validateField('username')"
                     :class="['w-full px-4 py-3 rounded-lg focus:outline-none transition-colors border',
-                      errors.name && touched.name ? 'border-red-500' : 'border-gray-600',
+                      errors.username && touched.username ? 'border-red-500' : 'border-gray-600',
                       'bg-gray-900 text-white placeholder-gray-500 focus:border-green-500']"
                     placeholder="John Doe"
                   />
-                  <p v-if="errors.name && touched.name" class="text-red-500 text-sm mt-1">{{ errors.name }}</p>
+                  <p v-if="errors.username && touched.username" class="text-red-500 text-sm mt-1">{{ errors.username }}</p>
                 </div>
                 <div>
                   <label for="email" class="block text-gray-300 mb-2">Email*</label>
@@ -106,14 +106,14 @@
     const router = useRouter()
 
     const state = reactive({
-        name: '',
+        username: '',
         email: '',
         password: '',
         confirmPassword: ''
     })
 
     const errors = reactive({
-        name: '',
+        username: '',
         email: '',
         password: '',
         confirmPassword: '',
@@ -121,15 +121,15 @@
     })
 
     const touched = reactive({
-        name: false,
+        username: false,
         email: false,
         password: false,
         confirmPassword: false
     })
 
-    function validateField(field: 'name' | 'email' | 'password' | 'confirmPassword') {
-        if (field === 'name') {
-            errors.name = state.name ? '' : 'Username is required'
+    function validateField(field: 'username' | 'email' | 'password' | 'confirmPassword') {
+        if (field === 'username') {
+            errors.username = state.username ? '' : 'Username is required'
         }
         if (field === 'email') {
             if (!state.email) errors.email = 'Email is required'
@@ -149,7 +149,7 @@
     function validateAll() {
         Object.keys(touched).forEach(k => touched[k as keyof typeof touched] = true)
         Object.keys(state).forEach(k => validateField(k as keyof typeof state))
-        return !errors.name && !errors.email && !errors.password && !errors.confirmPassword
+        return !errors.username && !errors.email && !errors.password && !errors.confirmPassword
     }
 
     const successMessage = ref('')
@@ -162,7 +162,7 @@
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({
-                name: state.name,
+                username: state.username,
                 email: state.email,
                 password: state.password
             })
