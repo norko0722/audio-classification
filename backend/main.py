@@ -16,10 +16,15 @@ from database.database import SessionLocal, engine, Base
 from database.models import User, Classification
 from passlib.context import CryptContext
 
-from pydantic import BaseModel
+from pydantic import BaseModel, EmailStr
 
 class SignInRequest(BaseModel):
     email: str
+    password: str
+
+class SignUpRequest(BaseModel):
+    username: str
+    email: EmailStr
     password: str
 
 pwd_context = CryptContext(schemes=["argon2"], deprecated="auto")
@@ -94,6 +99,27 @@ def sign_in(payload: SignInRequest, db: Session = Depends(get_db)):
     if error:
         raise HTTPException(status_code=400, detail=error)
     return user_info
+
+def get_user_by_username(db: Session, username: str):
+    return db.query(User).filter(User.username == username).first()
+
+def get_user_by_email(db: Session, email: str):
+    return db.query(User).filter(User.email == email).first()
+
+@app.post("/sign-up")
+def sign_up(payload: SignUpRequest, db: Session = Depends(get_db)):
+    if get_user_by_username(db, payload.username):
+        raise HTTPException(status_code=400, detail="Username already exists")
+
+    if get_user_by_email(db, payload.email):
+        raise HTTPException(status_code=400, detail="Email already exists")
+
+    try:
+        user = create_user(db, username=payload.username, email=payload.email, password=payload.password)
+    except Exception as e:
+        raise HTTPException(status_code=400, detail=str(e))
+
+    return {"result": "ok", "user_id": user.id, "username": user.username, "email": user.email}
 
 @app.post("/classification")
 async def audio_classification(file: UploadFile = File(...), segment_duration: int = 10, user_id: int = 1, db: Session = Depends(get_db)):
