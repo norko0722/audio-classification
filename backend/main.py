@@ -42,8 +42,7 @@ def create_test_user():
         hashed_pswd = pwd_context.hash(raw_password)
 
         user = User(
-            name="Vincent",
-            surname="Rybansky",
+            username="Vincent",
             email=test_email,
             hashed_password=hashed_pswd
         )
@@ -79,15 +78,14 @@ app.add_middleware(
 def user_login(email: str, password: str, db: Session):
     user = db.query(User).filter(User.email == email).first()
     if not user:
-        return None, "User not found"
+        return None, "Invalid email or password"
     
     if not pwd_context.verify(password, user.hashed_password):
-        return None, "Invalid password"
+        return None, "Invalid email or password"
     
     user_info = {
         "id": user.id,
-        "name": user.name,
-        "surname": user.surname,
+        "username": user.username,
         "email": user.email,
         "token": "mock-jwt-token"
     }
