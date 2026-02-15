@@ -52,7 +52,7 @@
 
       <div v-if="loading" class="text-gray-400">Loading...</div>
       <div v-if="error" class="text-red-400">{{ error }}</div>
-      <div v-if="!loading && filteredHistory.length" class="text-gray-400">No classifications yet.</div>
+      <div v-if="!loading && filteredHistory.length === 0" class="text-gray-400">No classifications yet.</div>
 
       <div class="space-y-4">
         <div
@@ -115,17 +115,10 @@
   import { useRouter, useRoute } from 'vue-router'
 
   const userName = ref('')
+  const userId = ref(null)
   const history = ref([])
   const loading = ref(false)
   const error = ref(null)
-
-  onMounted(() => {
-    const userString = localStorage.getItem('user')
-    if (userString) {
-      const user = JSON.parse(userString)
-      userName.value = user.name
-    }
-  })
 
   const router = useRouter()
   const route = useRoute()
@@ -141,11 +134,20 @@
   const filteredHistory = computed(() => history.value)
 
   const fetchHistory = async () => {
+    if (!userId.value) return
     loading.value = true
     error.value = null
+
     try {
-      const res = await $fetch('http://localhost:8000/history')
-      history.value = res
+      const res = await $fetch(`http://localhost:8000/history/${userId.value}`, {
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem('token')}`,
+        },
+      })
+      history.value = res.map(item => ({
+        ...item,
+        audio_metadata: { duration: item.duration }
+      }))
     } catch (err) {
       console.error(err)
       error.value = err.message || 'Failed to fetch history'
@@ -154,7 +156,15 @@
     }
   }
 
-  onMounted(() => fetchHistory())
+  onMounted(() => {
+    const userString = localStorage.getItem('user')
+    if (userString) {
+      const user = JSON.parse(userString)
+      userName.value = user.name
+      userId.value = user.id
+      fetchHistory()
+    }
+  })
 
   function signOut() {
     localStorage.removeItem('token')
@@ -162,3 +172,4 @@
     router.push('/sign-in')
   }
 </script>
+
