@@ -19,3 +19,4 @@ Thumbs.db
 ehthumbs.db 
 .vscode/ 
 .idea/ 
+backend/users.db
