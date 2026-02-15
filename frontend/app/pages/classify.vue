@@ -51,14 +51,16 @@
 
 <script setup lang="ts">
     import { useRouter, useRoute } from 'vue-router'
-    import Upload from '@/components/Upload.vue'
+    import { ref } from 'vue'
+    import Upload from '../components/Upload.vue'
+
     const userName = ref('')
 
     const userString = localStorage.getItem('user')
 
     if (userString) {
         const user = JSON.parse(userString)
-        userName.value = user.name
+        userName.value = user.username
         console.log(userName)
     }
 

@@ -88,7 +88,6 @@ const classifyGenre = async () => {
     showResults.value = true
   } catch (error) {
     console.error('Error classifying genre:', error)
-    // TODO: show error message
   }
 }
 </script>

@@ -101,7 +101,7 @@
 
 <script setup lang="ts">
     import { reactive, ref } from 'vue'
-    import { useRouter } from '#app'
+    import { useRouter } from 'vue-router'
 
     const router = useRouter()
 

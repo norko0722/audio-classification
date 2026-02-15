@@ -160,7 +160,7 @@
     const userString = localStorage.getItem('user')
     if (userString) {
       const user = JSON.parse(userString)
-      userName.value = user.name
+      userName.value = user.username
       userId.value = user.id
       fetchHistory()
     }
