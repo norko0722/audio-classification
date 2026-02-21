@@ -249,6 +249,8 @@
     return !errors.email && !errors.password
   }
 
+  const currentUser = ref<any>(null)
+
   async function signIn() {
     if (!validateAll()) return
 
@@ -256,7 +258,7 @@
       const response = await fetch('http://localhost:8000/sign-in', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(state)
+        body: JSON.stringify({ email: state.email, password: state.password })
       })
 
       const data = await response.json()
@@ -268,6 +270,7 @@
       localStorage.setItem('user', JSON.stringify(data))
       if (data.token) localStorage.setItem('token', data.token)
 
+      currentUser.value = data
       router.push('/classify')
 
     } catch (err: any) {
