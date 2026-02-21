@@ -1,3 +1,4 @@
+from tkinter.tix import Form
 from fastapi import FastAPI, UploadFile, File, HTTPException, Depends
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import JSONResponse
@@ -154,7 +155,7 @@ def sign_up(payload: SignUpRequest, db: Session = Depends(get_db)):
     return result
 
 @app.post("/classification")
-async def audio_classification(file: UploadFile = File(...), segment_duration: int = 10, user_id: int = 1, db: Session = Depends(get_db)):
+async def audio_classification(file: UploadFile = File(...), segment_duration: int = 10, user_id: int = Form(...), db: Session = Depends(get_db)):
     if not file.filename:
         raise HTTPException(400, "No file uploaded!")
     if file.content_type not in ["audio/wav", "audio/x-wav"]:
