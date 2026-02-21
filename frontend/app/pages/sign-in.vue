@@ -210,7 +210,7 @@
 <script setup lang="ts">
   import { reactive } from 'vue'
   import { useRouter } from 'vue-router'
-  import { ref } from 'vue'
+  import { currentUser } from '../store/user'
 
   const router = useRouter()
 
@@ -249,8 +249,6 @@
     validateField('password')
     return !errors.email && !errors.password
   }
-
-  export const currentUser = ref<any>(null)
 
   async function signIn() {
     if (!validateAll()) return
