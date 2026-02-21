@@ -19,6 +19,15 @@ from passlib.context import CryptContext
 
 from pydantic import BaseModel, EmailStr
 
+from dotenv import load_dotenv
+import jwt
+from datetime import datetime, timedelta
+
+load_dotenv()
+SECRET_KEY = os.getenv("SECRET_KEY")
+
+token = jwt.encode(payload, SECRET_KEY, algorithm="HS256")
+
 class SignInRequest(BaseModel):
     email: str
     password: str
@@ -32,28 +41,28 @@ pwd_context = CryptContext(schemes=["argon2"], deprecated="auto")
 
 Base.metadata.create_all(bind=engine)
 
-def create_test_user():
-    db = SessionLocal()
-    test_email = "rybansky@test.com"
-    user = db.query(User).filter(User.email == test_email).first()
+# def create_test_user():
+#     db = SessionLocal()
+#     test_email = "rybansky@test.com"
+#     user = db.query(User).filter(User.email == test_email).first()
     
-    if not user:
-        raw_password = "heslo123"
-        raw_password = raw_password[:72]
-        hashed_pswd = pwd_context.hash(raw_password)
+#     if not user:
+#         raw_password = "heslo123"
+#         raw_password = raw_password[:72]
+#         hashed_pswd = pwd_context.hash(raw_password)
 
-        user = User(
-            username="Vincent",
-            email=test_email,
-            hashed_password=hashed_pswd
-        )
-        db.add(user)
-        db.commit()
-        print("Test user created:", test_email, "/ heslo123")
+#         user = User(
+#             username="Vincent",
+#             email=test_email,
+#             hashed_password=hashed_pswd
+#         )
+#         db.add(user)
+#         db.commit()
+#         print("Test user created:", test_email, "/ heslo123")
 
-    db.close()
+#     db.close()
 
-create_test_user()
+# create_test_user()
 
 app = FastAPI()
 
@@ -78,17 +87,24 @@ app.add_middleware(
 
 def user_login(email: str, password: str, db: Session):
     user = db.query(User).filter(User.email == email).first()
-    if not user:
+    if not user or not pwd_context.verify(password, user.hashed_password):
         return None, "Invalid email or password"
     
     if not pwd_context.verify(password, user.hashed_password):
         return None, "Invalid email or password"
     
+    payload = {
+        "user_id": user.id,
+        "exp": datetime.utcnow() + timedelta(hours=1)
+    }
+
+    token = jwt.encode(payload, SECRET_KEY, algorithm="HS256")
+    
     user_info = {
         "id": user.id,
         "username": user.username,
         "email": user.email,
-        "token": "mock-jwt-token"
+        "token": token
     }
     return user_info, None
 
@@ -97,6 +113,7 @@ def sign_in(payload: SignInRequest, db: Session = Depends(get_db)):
     user_info, error = user_login(payload.email, payload.password, db)
     if error:
         raise HTTPException(status_code=400, detail=error)
+    
     return {
         "id": user_info["id"],
         "username": user_info["username"],
