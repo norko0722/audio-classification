@@ -48,7 +48,7 @@
 <script setup lang="ts">
   import { ref } from 'vue'
   import Results from './Results.vue'
-  import { currentUser } from '../pages/sign-in.vue'
+  import { currentUser } from '../store/user'
 
   const uploadedFile = ref<File | null>(null)
   const showResults = ref(false)
