@@ -1,7 +1,7 @@
-from tkinter.tix import Form
 from fastapi import FastAPI, UploadFile, File, HTTPException, Depends
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import JSONResponse
+from fastapi import Form
 import librosa
 import numpy as np
 import matplotlib.pyplot as plt
@@ -18,8 +18,6 @@ from database.models import User, Classification
 from passlib.context import CryptContext
 
 from pydantic import BaseModel, EmailStr
-
-from tkinter.tix import Form
 
 class SignInRequest(BaseModel):
     email: str
