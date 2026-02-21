@@ -9,7 +9,7 @@ venv/
 env/
 
 # Frontend
-.nuxt
+frontend/.nuxt/
 node_modules
 dist/
 .env

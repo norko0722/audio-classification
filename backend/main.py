@@ -104,20 +104,54 @@ def get_user_by_username(db: Session, username: str):
 def get_user_by_email(db: Session, email: str):
     return db.query(User).filter(User.email == email).first()
 
-@app.post("/sign-up")
-def sign_up(payload: SignUpRequest, db: Session = Depends(get_db)):
-    if get_user_by_username(db, payload.username):
-        raise HTTPException(status_code=400, detail="Username already exists")
+def hash_password(password: str) -> str:
+    return pwd_context.hash(password)
 
-    if get_user_by_email(db, payload.email):
-        raise HTTPException(status_code=400, detail="Email already exists")
+
+def register_user(db: Session, username: str, email: str, password: str):
+    if get_user_by_email(db, email):
+        return {"error": "Email already registered"}
+
+    if get_user_by_username(db, username):
+        return {"error": "Username already exists"}
+
+    password_hash = hash_password(password)
+
+    user = User(
+        username=username,
+        email=email,
+        hashed_password=password_hash
+    )
 
     try:
-        user = create_user(db, username=payload.username, email=payload.email, password=payload.password)
-    except Exception as e:
-        raise HTTPException(status_code=400, detail=str(e))
+        db.add(user)
+        db.commit()
+        db.refresh(user)
 
-    return {"result": "ok", "user_id": user.id, "username": user.username, "email": user.email}
+        return {
+            "message": "User registered successfully",
+            "user_id": user.id,
+            "username": user.username,
+            "email": user.email
+        }
+
+    except Exception as e:
+        db.rollback()
+        return {"error": str(e)}
+    
+@app.post("/sign-up")
+def sign_up(payload: SignUpRequest, db: Session = Depends(get_db)):
+    result = register_user(
+        db=db,
+        username=payload.username,
+        email=payload.email,
+        password=payload.password
+    )
+
+    if "error" in result:
+        raise HTTPException(status_code=400, detail=result["error"])
+
+    return result
 
 @app.post("/classification")
 async def audio_classification(file: UploadFile = File(...), segment_duration: int = 10, user_id: int = 1, db: Session = Depends(get_db)):
