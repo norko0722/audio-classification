@@ -1,4 +1,4 @@
-from fastapi import FastAPI, UploadFile, File, HTTPException, Depends
+from fastapi import FastAPI, UploadFile, File, HTTPException, Depends, Header
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import JSONResponse
 from fastapi import Form
@@ -25,8 +25,6 @@ from datetime import datetime, timedelta
 
 load_dotenv()
 SECRET_KEY = os.getenv("SECRET_KEY")
-
-token = jwt.encode(payload, SECRET_KEY, algorithm="HS256")
 
 class SignInRequest(BaseModel):
     email: str
@@ -121,6 +119,27 @@ def sign_in(payload: SignInRequest, db: Session = Depends(get_db)):
         "token": user_info["token"]
     }
 
+def get_current_user(authorization: str = Header(...), db: Session = Depends(get_db)):
+    if not authorization.startswith("Bearer "):
+        raise HTTPException(status_code=401, detail="Invalid authorization header")
+    token = authorization[len("Bearer "):]
+
+    try:
+        payload = jwt.decode(token, SECRET_KEY, algorithms=["HS256"])
+        user_id = payload.get("user_id")
+        if not user_id:
+            raise HTTPException(status_code=401, detail="Invalid token payload")
+    except jwt.ExpiredSignatureError:
+        raise HTTPException(status_code=401, detail="Token expired")
+    except jwt.InvalidTokenError:
+        raise HTTPException(status_code=401, detail="Invalid token")
+    
+    user = db.query(User).filter(User.id == user_id).first()
+    if not user:
+        raise HTTPException(status_code=404, detail="User not found")
+    return user
+
+
 def get_user_by_username(db: Session, username: str):
     return db.query(User).filter(User.username == username).first()
 
@@ -177,7 +196,9 @@ def sign_up(payload: SignUpRequest, db: Session = Depends(get_db)):
     return result
 
 @app.post("/classification")
-async def audio_classification(file: UploadFile = File(...), segment_duration: int = 10, user_id: int = Form(...), db: Session = Depends(get_db)):
+async def audio_classification(file: UploadFile = File(...), segment_duration: int = 10, current_user: User = Depends(get_current_user), db: Session = Depends(get_db)):
+    user_id = current_user.id
+
     if not file.filename:
         raise HTTPException(400, "No file uploaded!")
     if file.content_type not in ["audio/wav", "audio/x-wav"]:
@@ -262,6 +283,6 @@ async def audio_classification(file: UploadFile = File(...), segment_duration: i
             os.unlink(tmp_path)
 
 @app.get("/history/{user_id}")
-def get_classifications_history(user_id: int, skip: int = 0, limit: int = 20, db: Session = Depends(get_db)):
-    classifications = db.query(Classification).filter(Classification.user_id == user_id).offset(skip).limit(limit).all()
+def get_classifications_history(current_user: User = Depends(get_current_user), skip: int = 0, limit: int = 20, db: Session = Depends(get_db)):
+    classifications = db.query(Classification).filter(Classification.user_id == current_user.id).offset(skip).limit(limit).all()
     return classifications
