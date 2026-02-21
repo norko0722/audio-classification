@@ -98,7 +98,7 @@ def sign_in(payload: SignInRequest, db: Session = Depends(get_db)):
     if error:
         raise HTTPException(status_code=400, detail=error)
     return {
-        "user_id": user_info["id"],
+        "id": user_info["id"],
         "username": user_info["username"],
         "email": user_info["email"],
         "token": user_info["token"]
