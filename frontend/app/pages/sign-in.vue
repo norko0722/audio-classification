@@ -210,6 +210,7 @@
 <script setup lang="ts">
   import { reactive } from 'vue'
   import { useRouter } from 'vue-router'
+  import { ref } from 'vue'
 
   const router = useRouter()
 
@@ -249,7 +250,7 @@
     return !errors.email && !errors.password
   }
 
-  const currentUser = ref<any>(null)
+  export const currentUser = ref<any>(null)
 
   async function signIn() {
     if (!validateAll()) return
