@@ -136,7 +136,10 @@
   const filteredHistory = computed(() => history.value)
 
   const fetchHistory = async () => {
-    if (!userId.value) return
+    // if (!userId.value) return
+    const token = localStorage.getItem("token");
+    if (!token) throw new Error("User not logged in");
+
     loading.value = true
     error.value = null
 
@@ -150,6 +153,9 @@
         ...item,
         audio_metadata: { duration: item.duration }
       }))
+
+      return await res.json()
+
     } catch (err) {
       console.error(err)
       error.value = err.message || 'Failed to fetch history'
