@@ -46,49 +46,56 @@
 </template>
 
 <script setup lang="ts">
-import { ref } from 'vue'
-import Results from './Results.vue'
+  import { ref } from 'vue'
+  import Results from './Results.vue'
 
-const uploadedFile = ref<File | null>(null)
-const showResults = ref(false)
-const resultsData = ref<any>(null)
+  const currentUser = ref<any>(null)
 
-const handleFileSelect = (event: Event) => {
-  const target = event.target as HTMLInputElement
-  if (target.files && target.files[0]) {
-    uploadedFile.value = target.files[0]
+  const uploadedFile = ref<File | null>(null)
+  const showResults = ref(false)
+  const resultsData = ref<any>(null)
+
+  const handleFileSelect = (event: Event) => {
+    const target = event.target as HTMLInputElement
+    if (target.files && target.files[0]) {
+      uploadedFile.value = target.files[0]
+      showResults.value = false
+      resultsData.value = null
+    }
+  }
+
+  const removeFile = () => {
+    uploadedFile.value = null
     showResults.value = false
     resultsData.value = null
   }
-}
 
-const removeFile = () => {
-  uploadedFile.value = null
-  showResults.value = false
-  resultsData.value = null
-}
-
-const classifyGenre = async () => {
-  if (!uploadedFile.value) return
-
-  const formData = new FormData()
-  formData.append('file', uploadedFile.value)
-  formData.append('segment_duration', '10')
-
-  try {
-    const response = await fetch('http://localhost:8000/classification', {
-      method: 'POST',
-      body: formData
-    })
-    if (!response.ok) {
-      throw new Error('Classification failed')
+  const classifyGenre = async () => {
+    if (!uploadedFile.value) return
+    if (!currentUser.value) {
+      console.error('User not signed in!')
+      return
     }
-    const data = await response.json()
-    resultsData.value = data
-    showResults.value = true
-  } catch (error) {
-    console.error('Error classifying genre:', error)
+
+    const formData = new FormData()
+    formData.append('file', uploadedFile.value)
+    formData.append('segment_duration', '10')
+    formData.append('user_id', currentUser.value.id)
+
+    try {
+      const response = await fetch('http://localhost:8000/classification', {
+        method: 'POST',
+        body: formData
+      })
+      if (!response.ok) {
+        throw new Error('Classification failed')
+      }
+      const data = await response.json()
+      resultsData.value = data
+      showResults.value = true
+    } catch (error) {
+      console.error('Error classifying genre:', error)
+    }
   }
-}
 </script>
 
