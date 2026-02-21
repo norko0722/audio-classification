@@ -97,7 +97,7 @@ def sign_in(payload: SignInRequest, db: Session = Depends(get_db)):
     user_info, error = user_login(payload.email, payload.password, db)
     if error:
         raise HTTPException(status_code=400, detail=error)
-    return user_info
+    return {"user_id": user_info.id, "username": user_info.username, "email": user_info.email}
 
 def get_user_by_username(db: Session, username: str):
     return db.query(User).filter(User.username == username).first()
