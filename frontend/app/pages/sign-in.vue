@@ -266,12 +266,16 @@
         throw new Error(data.detail || 'Invalid email or password')
       }
 
-      localStorage.setItem('user', JSON.stringify(data))
-      if (data.token) localStorage.setItem('token', data.token)
+      localStorage.setItem('token', data.token)
+      localStorage.setItem("user", JSON.stringify({
+        id: data.id,
+        username: data.username,
+        email: data.email
+      }));
 
       currentUser.value = data
       router.push('/classify')
-
+      return data
     } catch (err: any) {
       errors.general = err.message
     }

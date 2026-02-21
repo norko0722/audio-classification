@@ -71,10 +71,13 @@
 
   const classifyGenre = async () => {
     if (!uploadedFile.value) return
-    if (!currentUser.value) {
-      console.error('User not signed in!')
-      return
-    }
+    // if (!currentUser.value) {
+    //   console.error('User not signed in!')
+    //   return
+    // }
+
+    const token = localStorage.getItem("token");
+    if (!token) throw new Error("User not logged in");
 
     const formData = new FormData()
     formData.append('file', uploadedFile.value)
@@ -84,14 +87,22 @@
     try {
       const response = await fetch('http://localhost:8000/classification', {
         method: 'POST',
+        headers: {
+          'Authorization': `Bearer ${token}`
+        },
         body: formData
       })
+
       if (!response.ok) {
         throw new Error('Classification failed')
       }
+
       const data = await response.json()
       resultsData.value = data
       showResults.value = true
+
+      const result = await response.json();
+      return result;
     } catch (error) {
       console.error('Error classifying genre:', error)
     }
