@@ -47,7 +47,7 @@
       <div class="flex items-center justify-between">
         <div class="flex items-center gap-2">
           <div class="bg-gradient-to-br from-green-600 to-emerald-600 p-2 rounded-lg">
-            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" class="text-white">
+            <!-- <svg width="24" height="24" viewBox="0 0 24 24" fill="none" class="text-white">
               <g>
                 <path
                   d="M12 2C6.48 2 2 6.48 2 12C2 17.52 6.48 22 12 22"
@@ -56,6 +56,14 @@
                   fill="none"
                 />
                 <circle cx="12" cy="12" r="1.5" fill="currentColor" />
+              </g>
+            </svg> -->
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" class="text-white">
+              <g>
+                <rect x="5" y="3" width="14" height="18" rx="2" stroke="currentColor" stroke-width="1.5" />
+                <circle cx="12" cy="8" r="2" stroke="currentColor" stroke-width="1.5" />
+                <circle cx="12" cy="15.5" r="3.5" stroke="currentColor" stroke-width="1.5" />
+                <circle cx="12" cy="15.5" r="1" fill="currentColor" />
               </g>
             </svg>
           </div>
