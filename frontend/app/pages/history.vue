@@ -1,15 +1,23 @@
 <template>
   <div class="min-h-screen bg-gradient-to-br from-gray-900 via-gray-800 to-gray-900">
     <header class="bg-gray-800 shadow-lg sticky top-0 z-50 border-b border-gray-700">
-        <div class="max-w-7xl mx-auto px-2 sm:px-4 lg:px-6 py-4">
-            <div class="flex items-center justify-between">
-                <div class="flex items-center gap-2">
+      <div class="max-w-7xl mx-auto px-2 sm:px-4 lg:px-6 py-4">
+        <div class="flex items-center justify-between">
+          <div class="flex items-center gap-2">
                     <div class="bg-gradient-to-br from-green-600 to-emerald-600 p-2 rounded-lg">
-                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" class="text-white">
+                        <!-- <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" class="text-white">
                         <g>
                             <path d="M12 2C6.48 2 2 6.48 2 12C2 17.52 6.48 22 12 22" stroke="currentColor" stroke-width="1.5" fill="none"></path>
                             <circle cx="12" cy="12" r="1.5" fill="currentColor"></circle>
                         </g>
+                        </svg> -->
+                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" class="text-white">
+                            <g>
+                                <rect x="5" y="3" width="14" height="18" rx="2" stroke="currentColor" stroke-width="1.5" />
+                                <circle cx="12" cy="8" r="2" stroke="currentColor" stroke-width="1.5" />
+                                <circle cx="12" cy="15.5" r="3.5" stroke="currentColor" stroke-width="1.5" />
+                                <circle cx="12" cy="15.5" r="1" fill="currentColor" />
+                            </g>
                         </svg>
                     </div>
                     <div>
@@ -42,19 +50,33 @@
                         Sign Out
                     </button>
                 </div>
-            </div>
-            </div>
-        </header>
+        </div>
+      </div>
+    </header>
 
     <main class="max-w-7xl mx-auto px-4 py-8">
       <div class="mb-8">
-        <h2 class="text-white text-3xl font-semibold mb-2">Classification History</h2>
+        <h2 class="text-white mb-2">Classification History</h2>
         <p class="text-gray-400">View all your previous audio genre classifications</p>
       </div>
 
       <div v-if="loading" class="text-gray-400">Loading...</div>
       <div v-if="error" class="text-red-400">{{ error }}</div>
-      <div v-if="!loading && filteredHistory.length === 0" class="text-gray-400">No classifications yet.</div>
+      <div v-if="!loading && filteredHistory.length === 0" class="text-gray-400">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-20">
+          <div class="text-center">
+            <div class="inline-flex items-center justify-center w-24 h-24 bg-gray-800 rounded-full mb-6">
+              <svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-file-audio text-gray-500">
+                <path d="M17.5 22h.5a2 2 0 0 0 2-2V7l-5-5H6a2 2 0 0 0-2 2v3"></path>
+                <path d="M14 2v4a2 2 0 0 0 2 2h4"></path>
+                <path d="M2 19a2 2 0 1 1 4 0v1a2 2 0 1 1-4 0v-4a6 6 0 0 1 12 0v4a2 2 0 1 1-4 0v-1a2 2 0 1 1 4 0"></path>
+              </svg>
+            </div>
+            <h2 class="text-white mb-4">No History Yet</h2>
+            <p class="text-gray-400 max-w-md mx-auto">Upload your first audio file to start building your classification history.</p>
+          </div>
+        </div>
+      </div>
 
       <div class="space-y-4">
         <div
