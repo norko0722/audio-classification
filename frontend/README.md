@@ -1,75 +1,74 @@
-# Nuxt Minimal Starter
+# Frontend - Audio Genre Classification UI
 
-Look at the [Nuxt documentation](https://nuxt.com/docs/getting-started/introduction) to learn more.
+Nuxt 3 + Vue 3 frontend pre projekt audio žánrovej klasifikácie. Umožňuje používateľovi:
 
-## Setup
+- nahrať audio súbor,
+- zobraziť detegovaný žáner a percentuálne rozdelenie,
+- pozrieť si históriu klasifikácií,
+- zobraziť RMS loudness graf a spektrogram.
 
-Make sure to install dependencies:
+## Tech stack
+
+- Nuxt 3 (Vue 3, Composition API)
+- TypeScript
+- Tailwind CSS
+
+## Štruktúra
 
 ```bash
-# npm
+frontend/
+├── app/
+│   ├── app.vue            # Root layout
+│   ├── pages/             # Nuxt stránky (routing)
+│   │   ├── index.vue      # Landing page
+│   │   ├── classify.vue   # Hlavná stránka na klasifikáciu
+│   │   ├── history.vue    # História klasifikácií
+│   │   ├── sign-in.vue    # Prihlásenie
+│   │   ├── sign-up.vue    # Registrácia
+│   │   └── test.vue       # Testovacia stránka
+│   ├── components/        # Zdieľané komponenty
+│   │   ├── Header.vue
+│   │   ├── Footer.vue
+│   │   ├── Home.vue
+│   │   ├── Upload.vue
+│   │   ├── AudioUpload.vue
+│   │   ├── Results.vue
+│   │   └── AboutUs.vue
+│   └── store/
+│       └── user.ts        # Pinia store pre používateľa
+├── public/                # Statické súbory (favicon, robots.txt)
+├── nuxt.config.ts         # Konfigurácia Nuxt aplikácie
+├── package.json           # Závislosti a skripty
+└── tsconfig.json          # TypeScript konfigurácia
+```
+
+## Inštalácia
+
+```bash
+cd frontend
 npm install
-
-# pnpm
-pnpm install
-
-# yarn
-yarn install
-
-# bun
-bun install
 ```
 
-## Development Server
+## Vývojový server
 
-Start the development server on `http://localhost:3000`:
+Spustí Nuxt dev server na `http://localhost:3000`:
 
 ```bash
-# npm
 npm run dev
-
-# pnpm
-pnpm dev
-
-# yarn
-yarn dev
-
-# bun
-bun run dev
 ```
 
-## Production
-
-Build the application for production:
+## Build pre produkciu
 
 ```bash
-# npm
 npm run build
-
-# pnpm
-pnpm build
-
-# yarn
-yarn build
-
-# bun
-bun run build
 ```
 
-Locally preview production build:
+Lokalné preview produkčného buildu:
 
 ```bash
-# npm
 npm run preview
-
-# pnpm
-pnpm preview
-
-# yarn
-yarn preview
-
-# bun
-bun run preview
 ```
 
-Check out the [deployment documentation](https://nuxt.com/docs/getting-started/deployment) for more information.
+## Konfigurácia API
+
+URL backendu (FastAPI) sa nastavuje v `nuxt.config.ts` (napr. prostredníctvom runtime config / env premenných). Uisti sa, že backend beží na rovnakej URL, akú používaš v API volaniach z komponentov (typicky `http://localhost:8000`).*** End Patch``` -->

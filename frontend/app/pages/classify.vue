@@ -62,6 +62,10 @@
     import { ref } from 'vue'
     import Upload from '../components/Upload.vue'
 
+    definePageMeta({
+        middleware: 'auth'
+    })
+
     const userName = ref('')
 
     const userString = localStorage.getItem('user')

@@ -34,11 +34,15 @@ Before running the project, make sure you have the following installed:
 
 ## Running
 
+Z koreňového adresára backendu:
+
 ```bash
+cd backend
+source venv/bin/activate  # ak ešte nie je aktivovaný
 uvicorn main:app --reload
 ```
 
-Server will run on `http://localhost:8000`
+Server bude bežať na `http://localhost:8000`.
 
 ## API Documentation
 
@@ -50,11 +54,19 @@ After starting the server, automatic API documentation is available:
 
 ```
 backend/
-├── main.py              # FastAPI application
-├── models/              # ML models and classification logic
+├── main.py              # FastAPI application (routes, startup)
+├── database/
+│   ├── database.py      # DB engine/session configuration (SQLite)
+│   └── models.py        # SQLAlchemy models (e.g. classification history)
+├── models/              # Trained ML artifacts (scaler, label encoder, model)
+│   ├── label_encoder.pkl
+│   ├── scaler.pkl
+│   └── trained_model.pkl
 ├── services/            # Business logic and audio processing
+│   ├── feature_extractor.py
+│   └── model_service.py
 ├── requirements.txt     # Python dependencies
-└── README.md           # This file
+└── README.md            # This file
 ```
 
 ## Help

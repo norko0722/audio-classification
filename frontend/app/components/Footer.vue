@@ -4,7 +4,7 @@
             <div class="text-center">
                 <div class="flex items-center justify-center gap-3 mb-4">
                     <div class="bg-gradient-to-br from-green-600 to-emerald-600 p-2 rounded-lg">
-                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" class="text-white">
+                        <!-- <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" class="text-white">
                             <g>
                                 <path d="M12 2C6.48 2 2 6.48 2 12C2 17.52 6.48 22 12 22" stroke="currentColor" stroke-width="1.5" fill="none"></path>
                                 <path d="M12 4C7.58 4 4 7.58 4 12C4 16.42 7.58 20 12 20" stroke="currentColor" stroke-width="0.5" fill="none" opacity="0.6"></path>
@@ -23,6 +23,14 @@
                                 <rect x="20.5" y="6" width="1.5" height="12" fill="currentColor" rx="0.5"></rect>
                             </g>
                             <line x1="12" y1="2" x2="12" y2="22" stroke="currentColor" stroke-width="0.5" opacity="0.3"></line>
+                        </svg> -->
+                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" class="text-white">
+                            <g>
+                                <rect x="5" y="3" width="14" height="18" rx="2" stroke="currentColor" stroke-width="1.5" />
+                                <circle cx="12" cy="8" r="2" stroke="currentColor" stroke-width="1.5" />
+                                <circle cx="12" cy="15.5" r="3.5" stroke="currentColor" stroke-width="1.5" />
+                                <circle cx="12" cy="15.5" r="1" fill="currentColor" />
+                            </g>
                         </svg>
                     </div>
                     <span class="text-xl">AudioGenre AI</span>

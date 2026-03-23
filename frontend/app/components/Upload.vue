@@ -53,7 +53,7 @@
         Drop your WAV file below and our AI will analyze it to determine the most likely music genre with confidence scores.
       </p>
     </div>
-    <div class="w-full max-w-2xl mx-auto">
+    <div>
       <div class="border-2 border-dashed rounded-lg p-12 text-center transition-colors border-gray-600 hover:border-gray-500 bg-gray-800" v-if="!uploadedFile">
         <svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-upload mx-auto mb-4 text-gray-500">
           <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>

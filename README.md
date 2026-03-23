@@ -11,15 +11,25 @@ The project focuses on training an AI model to recognize basic music genres. It 
 
 ```
 audio-classification/
-├── backend/          # FastAPI backend server
-│   ├── main.py       # FastAPI application
-│   ├── models/       # ML models and classification logic
-│   ├── services/     # Business logic and audio processing
-│   └── README.md     # Backend documentation
-├── frontend/         # Web UI application
-│   ├── src/          # Source files
-│   └── README.md     # Frontend documentation
-└── README.md         # This file
+├── backend/              # FastAPI backend server
+│   ├── main.py           # FastAPI application entrypoint
+│   ├── database/         # SQLite database models and connection
+│   │   ├── database.py
+│   │   └── models.py
+│   ├── models/           # Trained ML artifacts (scaler, label encoder, classifier)
+│   ├── services/         # Business logic and audio feature extraction
+│   ├── requirements.txt  # Backend Python dependencies
+│   └── README.md         # Backend documentation
+├── frontend/             # Nuxt 3 + Vue 3 + Tailwind web UI
+│   ├── app/              # Application source (pages, components, store)
+│   │   ├── pages/        # Nuxt pages (routing)
+│   │   ├── components/   # Reusable UI components
+│   │   └── store/        # Pinia stores
+│   ├── public/           # Static assets (favicon, robots.txt, ...)
+│   ├── nuxt.config.ts    # Nuxt configuration
+│   ├── package.json      # Frontend dependencies & scripts
+│   └── README.md         # Frontend documentation
+└── README.md             # This file
 ```
 
 ## Getting Started
@@ -80,8 +90,10 @@ Backend will run on `http://localhost:8000`
 
 ```bash
 cd frontend
-npm start
+npm run dev
 ```
+
+Frontend bude bežať na `http://localhost:3000` (implicitný Nuxt dev server).
 
 ## Help
 

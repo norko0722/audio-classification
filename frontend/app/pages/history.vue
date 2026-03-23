@@ -138,6 +138,10 @@
   import { ref, computed, onMounted } from 'vue'
   import { useRouter, useRoute } from 'vue-router'
 
+  definePageMeta({
+    middleware: 'auth'
+  })
+
   const userName = ref('')
   const userId = ref(null)
   const history = ref([])
@@ -168,7 +172,7 @@
     try {
       const res = await $fetch(`http://localhost:8000/history/${userId.value}`, {
         headers: {
-          Authorization: `Bearer ${localStorage.getItem('token')}`,
+          Authorization: `Bearer ${token}`,
         },
       })
       history.value = res.map(item => ({
@@ -176,7 +180,7 @@
         audio_metadata: { duration: item.duration }
       }))
 
-      return await res.json()
+      // return await res.json()
 
     } catch (err) {
       console.error(err)

@@ -16,7 +16,7 @@
                         </g>
                     </svg>
                 </div>
-                <h2 class="text-white mb-4">About AudioGenre AI</h2>
+                <h2 class="text-white mb-4">About AI AudioGenre</h2>
                 <p class="text-gray-300 max-w-2xl mx-auto">
                     Our cutting-edge technology combines deep learning and audio signal processing to deliver accurate genre classification for your music collection.
                 </p>
@@ -33,18 +33,14 @@
                         </span>
                     </div>
                     <h3 class="text-white mb-2">High Accuracy</h3>
-                    <p class="text-gray-400">Our AI models are trained on millions of audio samples to ensure precise genre detection across multiple music styles.</p>
+                    <p class="text-gray-400">Our AI model is trained on the GTZAN dataset, comprising 1,000 audio samples, to ensure precise genre detection across 10 music styles.</p>
                 </div>
                 <div class="text-center p-6 bg-gray-900 rounded-lg border border-gray-700">
                     <div class="bg-gradient-to-br from-emerald-900 to-emerald-800 w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-4">
                         <span class="text-3xl">
-                            <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-bolt text-green-400">
-                                <path d="M21 16V4a2 2 0 0 0-2-2H5a2 2 0 0 0-2 2v16l4-4h12a2 2 0 0 0 2-2z"></path>
-                                <path d="M13 10l-3 3h6l-3 3"></path>
-                                </svg>
-                                <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-zap text-green-400">
-                                    <polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"></polygon>
-                                </svg>
+                            <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-zap text-green-400">
+                                <polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"></polygon>
+                            </svg>
                         </span>
                     </div>
                     <h3 class="text-white mb-2">Fast Processing</h3>

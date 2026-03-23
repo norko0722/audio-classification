@@ -152,7 +152,7 @@
 </script> -->
 
 <template>
-  <div class="min-h-screen bg-gray-900 flex items-center justify-center px-4">
+  <div class="min-h-screen bg-gradient-to-br from-gray-900 via-gray-800 to-gray-900 flex items-center justify-center px-4">
     <div class="w-full max-w-md">
       <NuxtLink to="/" class="flex items-center gap-2 text-gray-400 hover:text-green-400 transition-colors mb-8">
         <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-arrow-left">
@@ -201,6 +201,12 @@
             Sign In
           </button>
         </form>
+        <div class="mt-6 text-center">
+          <p class="text-gray-400">
+            You don`t have an account? 
+            <NuxtLink to="/sign-in" class="text-green-400 hover:text-green-300 transition-colors">Sign Up</NuxtLink>
+          </p>
+        </div>
       </div>
       <p v-if="errors.general" class="text-red-500 text-sm mt-10 text-center">{{ errors.general }}</p>
     </div>

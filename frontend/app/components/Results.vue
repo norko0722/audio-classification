@@ -1,5 +1,5 @@
-<!-- <template>
-  <div class="bg-gradient-to-br from-green-600 to-emerald-600 rounded-lg shadow-lg p-8 text-white">
+<template>
+    <div class="bg-gradient-to-br from-green-600 to-emerald-600 rounded-lg shadow-lg p-8 mt-8 text-white">
     <div class="flex items-center justify-between">
       <div>
         <p class="text-green-100 mb-2">Primary Genre Detected</p>
@@ -15,34 +15,34 @@
     </div>
   </div>
 
-  <div class="bg-gray-800 rounded-lg shadow-lg p-6 border border-gray-700 mt-6">
-    <div class="flex items-center gap-3 mb-6">
-      <div class="bg-green-900 p-2 rounded-lg">
-        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-layers text-green-400">
-          <path d="M12.83 2.18a2 2 0 0 0-1.66 0L2.6 6.08a1 1 0 0 0 0 1.83l8.58 3.91a2 2 0 0 0 1.66 0l8.58-3.9a1 1 0 0 0 0-1.83z"></path>
-          <path d="M2 12a1 1 0 0 0 .58.91l8.6 3.91a2 2 0 0 0 1.65 0l8.58-3.9A1 1 0 0 0 22 12"></path>
-          <path d="M2 17a1 1 0 0 0 .58.91l8.6 3.91a2 2 0 0 0 1.65 0l8.58-3.9A1 1 0 0 0 22 17"></path>
-        </svg>
-      </div>
-      <div>
-        <h3 class="text-white">Genre Distribution</h3>
-        <p class="text-gray-400">All detected genres</p>
-      </div>
-    </div>
-    <div class="space-y-4">
-      <div v-for="(percentage, genre) in data.percentages" :key="genre" class="space-y-2">
-        <div class="flex justify-between items-center">
-          <span class="text-gray-200" :class="{ 'text-yellow-400': genre === data.genre }">{{ genre === data.genre ? 'TOP: ' : '' }}{{ genre }}</span>
-          <span class="font-medium text-white">{{ percentage }}%</span>
+  <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mt-">
+    <div class="bg-gray-800 rounded-lg shadow-lg p-6 border border-gray-700 mt-6">
+      <div class="flex items-center gap-3 mb-6">
+        <div class="bg-green-900 p-2 rounded-lg">
+          <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-layers text-green-400">
+            <path d="M12.83 2.18a2 2 0 0 0-1.66 0L2.6 6.08a1 1 0 0 0 0 1.83l8.58 3.91a2 2 0 0 0 1.66 0l8.58-3.9a1 1 0 0 0 0-1.83z"></path>
+            <path d="M2 12a1 1 0 0 0 .58.91l8.6 3.91a2 2 0 0 0 1.65 0l8.58-3.9A1 1 0 0 0 22 12"></path>
+            <path d="M2 17a1 1 0 0 0 .58.91l8.6 3.91a2 2 0 0 0 1.65 0l8.58-3.9A1 1 0 0 0 22 17"></path>
+          </svg>
         </div>
-        <div class="w-full bg-gray-700 rounded-full h-3 overflow-hidden">
-          <div class="h-full rounded-full transition-all duration-1000 bg-gradient-to-r from-green-500 to-emerald-500" :style="{ width: `${percentage}%` }"></div>
+        <div>
+          <h3 class="text-white">Genre Distribution</h3>
+          <p class="text-gray-400">All detected genres</p>
         </div>
       </div>
+      <div class="space-y-4">
+        <div v-for="(percentage, genre) in data.percentages" :key="genre" class="space-y-2">
+          <div class="flex justify-between items-center">
+            <span class="text-gray-200" :class="{ 'text-yellow-400': genre === data.genre }">{{ genre === data.genre ? 'TOP: ' : '' }}{{ genre }}</span>
+            <span class="font-medium text-white">{{ percentage }}%</span>
+          </div>
+          <div class="w-full bg-gray-700 rounded-full h-3 overflow-hidden">
+            <div class="h-full rounded-full transition-all duration-1000 bg-gradient-to-r from-green-500 to-emerald-500" :style="{ width: `${percentage}%` }"></div>
+          </div>
+        </div>
+      </div>
     </div>
-  </div>
-
-  <div class="bg-gray-800 rounded-lg shadow-lg p-6 border border-gray-700 mt-6">
+      <div class="bg-gray-800 rounded-lg shadow-lg p-6 border border-gray-700 mt-6">
     <div class="flex items-center gap-3 mb-6">
       <div class="bg-green-900 p-2 rounded-lg">
         <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-file-audio text-green-400">
@@ -102,6 +102,7 @@
       </div>
     </div>
   </div>
+  </div>
 
   <div class="bg-gray-800 rounded-lg shadow-lg p-6 border border-gray-700 mt-6">
     <div class="flex items-center gap-3 mb-6">
@@ -115,10 +116,10 @@
         <p class="text-gray-400">Audio intensity analysis</p>
       </div>
     </div>
-    <div class="h-64">
-      <div class="recharts-responsive-container" style="width: 100%; height: 100%; min-width: 0px;">
-        <div class="recharts-wrapper" style="position: relative; cursor: default; width: 100%; height: 100%; max-height: 256px; max-width: 757px;">
-          <svg class="recharts-surface" width="757" height="256" viewBox="0 0 757 256" style="width: 100%; height: 100%;">
+    <div class="h-64 w-full">
+      <div class="recharts-responsive-container" style="width: 100%; height: 100%; min-width: 0;">
+        <div class="recharts-wrapper" style="position: relative; cursor: default; width: 100%; height: 100%; max-height: 256px; max-width: 100%;">
+          <svg class="recharts-surface flex items-center" width="100%" height="256" viewBox="65 0 687 256" style="width: 100%; height: 100%;">
             <title></title>
             <desc></desc>
             <defs>
@@ -306,7 +307,7 @@
               <g class="recharts-layer">
                 <defs>
                   <clipPath id="animationClipPath-recharts-area-3">
-                    <rect x="65" y="0" width="687" height="223"></rect>
+                    <rect x="65" y="0" width="1000" height="223"></rect>
                   </clipPath>
                 </defs>
                 <g class="recharts-layer" clip-path="url(#animationClipPath-recharts-area-3)">
@@ -339,125 +340,7 @@
       <img :src="`data:image/png;base64,${data.spectrogram}`" alt="Spectrogram" class="max-w-full h-auto rounded-lg" />
     </div>
   </div>
-</template> -->
-
-<template>
-  <div class="bg-gradient-to-br from-green-600 to-emerald-600 rounded-lg shadow-lg p-8 text-white">
-    <div class="flex items-center justify-between">
-      <div>
-        <p class="text-green-100 mb-2">Primary Genre Detected</p>
-        <h2 class="text-4xl mb-2">🎵 {{ data.genre }}</h2>
-        <p class="text-green-100">{{ data.percentages[data.genre] }}% confidence</p>
-      </div>
-      <div class="bg-white/20 p-6 rounded-lg backdrop-blur-sm">
-        <svg xmlns="http://www.w3.org" width="64" height="64" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-music2 text-white">
-          <circle cx="8" cy="18" r="4"></circle>
-          <path d="M12 18V2l7 4"></path>
-        </svg>
-      </div>
-    </div>
-  </div>
-  <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mt-6">
-    <div class="bg-gray-800 rounded-lg shadow-lg p-6 border border-gray-700">
-      <div class="flex items-center gap-3 mb-6">
-        <div class="bg-green-900 p-2 rounded-lg">
-          <svg xmlns="http://www.w3.org" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-layers text-green-400">
-            <path d="M12.83 2.18a2 2 0 0 0-1.66 0L2.6 6.08a1 1 0 0 0 0 1.83l8.58 3.91a2 2 0 0 0 1.66 0l8.58-3.9a1 1 0 0 0 0-1.83z"></path>
-            <path d="M2 12a1 1 0 0 0 .58.91l8.6 3.91a2 2 0 0 0 1.65 0l8.58-3.9A1 1 0 0 0 22 12"></path>
-            <path d="M2 17a1 1 0 0 0 .58.91l8.6 3.91a2 2 0 0 0 1.65 0l8.58-3.9A1 1 0 0 0 22 17"></path>
-          </svg>
-        </div>
-        <div>
-          <h3 class="text-white">Genre Distribution</h3>
-          <p class="text-gray-400">All detected genres</p>
-        </div>
-      </div>
-      <div class="space-y-4">
-        <div v-for="(percentage, genre) in data.percentages" :key="genre" class="space-y-2">
-          <div class="flex justify-between items-center">
-            <span class="text-gray-200" :class="{ 'text-yellow-400': genre === data.genre }">{{ genre === data.genre ? 'TOP: ' : '' }}{{ genre }}</span>
-            <span class="font-medium text-white">{{ percentage }}%</span>
-          </div>
-          <div class="w-full bg-gray-700 rounded-full h-3 overflow-hidden">
-            <div class="h-full rounded-full transition-all duration-1000 bg-gradient-to-r from-green-500 to-emerald-500" :style="{ width: `${percentage}%` }"></div>
-          </div>
-        </div>
-      </div>
-    </div>
-    <div class="bg-gray-800 rounded-lg shadow-lg p-6 border border-gray-700">
-      <div class="flex items-center gap-3 mb-6">
-        <div class="bg-green-900 p-2 rounded-lg">
-          <svg xmlns="http://www.w3.org" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-file-audio text-green-400">
-            <path d="M17.5 22h.5a2 2 0 0 0 2-2V7l-5-5H6a2 2 0 0 0-2 2v3"></path>
-            <path d="M14 2v4a2 2 0 0 0 2 2h4"></path>
-            <path d="M2 19a2 2 0 1 1 4 0v1a2 2 0 1 1-4 0v-4a6 6 0 0 1 12 0v4a2 2 0 1 1-4 0v-1a2 2 0 1 1 4 0"></path>
-          </svg>
-        </div>
-        <div>
-          <h3 class="text-white">Audio Information</h3>
-          <p class="text-gray-400 truncate">{{ data.filename }}</p>
-        </div>
-      </div>
-      <div class="space-y-4">
-        <div class="flex items-center justify-between p-3 bg-gray-900 rounded-lg">
-          <div class="flex items-center gap-3">
-            <svg xmlns="http://www.w3.org" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-clock text-green-400">
-              <circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline>
-            </svg>
-            <span class="text-gray-300">Duration</span>
-          </div>
-          <span class="text-white font-medium">{{ formatDuration(data.audio_metadata.duration) }}</span>
-        </div>
-        <div class="flex items-center justify-between p-3 bg-gray-900 rounded-lg">
-          <div class="flex items-center gap-3">
-            <svg xmlns="http://www.w3.org" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-target text-green-400">
-              <circle cx="12" cy="12" r="10"></circle><circle cx="12" cy="12" r="6"></circle><circle cx="12" cy="12" r="2"></circle>
-            </svg>
-            <span class="text-gray-300">Sample Rate</span>
-          </div>
-          <span class="text-white font-medium">{{ data.audio_metadata.sample_rate.toLocaleString() }} Hz</span>
-        </div>
-        <div class="flex items-center justify-between p-3 bg-gray-900 rounded-lg">
-          <div class="flex items-center gap-3">
-            <svg xmlns="http://www.w3.org" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-zap text-green-400">
-              <polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"></polygon>
-            </svg>
-            <span class="text-gray-300">Total Segments</span>
-          </div>
-          <span class="text-white font-medium">{{ data.audio_metadata.total_segments }}</span>
-        </div>
-        <div class="flex items-center justify-between p-3 bg-gray-900 rounded-lg">
-          <div class="flex items-center gap-3">
-            <svg xmlns="http://www.w3.org" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-lock text-green-400">
-              <rect width="18" height="11" x="3" y="11" rx="2" ry="2"></rect><path d="M7 11V7a5 5 0 0 1 10 0v4"></path>
-            </svg>
-            <span class="text-gray-300">Security Status</span>
-          </div>
-          <span class="text-white font-medium text-xs bg-green-900/50 px-2 py-1 rounded border border-green-500/30">VERIFIED</span>
-        </div>
-      </div>
-    </div>
-  </div>
-  <div class="bg-gray-800 rounded-lg shadow-lg p-6 border border-gray-700 mt-6">
-    <div class="flex items-center gap-3 mb-6">
-      <div class="bg-green-900 p-2 rounded-lg">
-        <svg xmlns="http://www.w3.org" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-activity text-green-400">
-          <path d="M22 12h-2.48a2 2 0 0 0-1.93 1.46l-2.35 8.36a.25.25 0 0 1-.48 0L9.24 2.18a.25.25 0 0 0-.48 0l-2.35 8.36A2 2 0 0 1 4.49 12H2"></path>
-        </svg>
-      </div>
-      <div>
-        <h3 class="text-white">RMS Loudness Over Time</h3>
-        <p class="text-gray-400">Audio intensity analysis</p>
-      </div>
-    </div>
-    <div class="h-64 overflow-hidden rounded-lg">
-      <div class="w-full h-full flex items-center justify-center text-gray-500 bg-gray-900/50 italic">
-        Graph visualization area
-      </div>
-    </div>
-  </div>
 </template>
-
 
 <script setup lang="ts">
   interface Props {
@@ -482,4 +365,29 @@
     const secs = Math.floor(seconds % 60)
     return `${mins}:${secs.toString().padStart(2, '0')}`
   }
+
+  const generateLinePath = (history: any) => {
+  if (!Array.isArray(history) || history.length < 2) return '';
+  const width = 1000;
+  const height = 216;
+  const step = width / (history.length - 1);
+  
+  // Ošetrenie číselných hodnôt
+  const cleanHistory = history.map(v => typeof v === 'number' ? v : 0);
+  const min = Math.min(...cleanHistory, -60);
+  const max = Math.max(...cleanHistory, 0);
+  const range = max - min || 1;
+
+  return cleanHistory.map((v, i) => {
+    const x = i * step;
+    const y = 221 - ((v - min) / range) * height;
+    return (i === 0 ? 'M' : 'L') + `${x.toFixed(2)},${y.toFixed(2)}`;
+  }).join(' ');
+};
+
+const generateAreaPath = (history: any) => {
+  const line = generateLinePath(history);
+  return line ? `${line} L 1000,221 L 0,221 Z` : '';
+};
+
 </script>
