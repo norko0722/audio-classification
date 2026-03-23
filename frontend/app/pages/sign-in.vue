@@ -204,7 +204,7 @@
         <div class="mt-6 text-center">
           <p class="text-gray-400">
             You don`t have an account? 
-            <NuxtLink to="/sign-in" class="text-green-400 hover:text-green-300 transition-colors">Sign Up</NuxtLink>
+            <NuxtLink to="/sign-up" class="text-green-400 hover:text-green-300 transition-colors">Sign Up</NuxtLink>
           </p>
         </div>
       </div>
