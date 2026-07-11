@@ -33,10 +33,10 @@
                             </g>
                         </svg>
                     </div>
-                    <span class="text-xl">AudioGenre AI</span>
+                    <span class="text-xl">AI AudioGenre</span>
                 </div>
                 <p class="text-gray-400 mb-4">Powered by advanced machine learning for accurate music classification</p>
-                <p class="text-gray-500">© 2025 AudioGenre AI. All rights reserved.</p>
+                <p class="text-gray-500">© 2026 AI AudioGenre. All rights reserved.</p>
             </div>
         </div>
     </footer>

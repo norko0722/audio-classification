@@ -13,7 +13,7 @@
             </NuxtLink>
             <div class="bg-gray-800 rounded-lg shadow-xl p-8 border border-gray-700">
               <h2 class="text-white text-center mb-2">Create Account</h2>
-              <p class="text-gray-400 text-center mb-8">Join AudioGenre AI today</p>
+              <p class="text-gray-400 text-center mb-8">Join AI AudioGenre today</p>
               <form @submit.prevent="signUp" class="space-y-6">
                 <div>
                   <label for="name" class="block text-gray-300 mb-2">Username*</label>
@@ -79,7 +79,7 @@
                   type="submit"
                   class="w-full px-6 py-3 bg-gradient-to-r from-green-600 to-emerald-600 text-white rounded-lg hover:from-green-700 hover:to-emerald-700 transition-all shadow-lg"
                 >
-                  Create Account
+                  Sign Up
                 </button>
               </form>
               <div class="mt-6 text-center">
@@ -89,11 +89,14 @@
                 </p>
               </div>
             </div>
+              <p v-if="successMessage" class="text-green-500 text-sm mt-4 text-center">
+                {{ successMessage }}
+              </p>
+              <p v-if="errors.general" class="text-red-500 text-sm mt-4 text-center">
+                {{ errors.general }}
+              </p>
           </div>
         </div>
-        <p v-if="successMessage" class="text-green-500 text-sm mt-4 text-center">
-            {{ successMessage }}
-        </p>
       </div>
     </div>
   </div>
@@ -104,6 +107,7 @@
     import { useRouter } from 'vue-router'
 
     const router = useRouter()
+    const loading = ref(false)
 
     const state = reactive({
         username: '',
@@ -154,11 +158,39 @@
 
     const successMessage = ref('')
 
-    async function signUp() {
-        if (!validateAll()) return
+    // async function signUp() {
+    //     if (!validateAll()) return
 
-        try {
-            const response = await fetch('http://localhost:8000/sign-up', {
+    //     try {
+    //         const response = await fetch('http://localhost:8000/sign-up', {
+    //         method: 'POST',
+    //         headers: { 'Content-Type': 'application/json' },
+    //         body: JSON.stringify({
+    //             username: state.username,
+    //             email: state.email,
+    //             password: state.password
+    //         })
+    //         })
+
+    //         const data = await response.json()
+    //         if (!response.ok) throw new Error(data.detail || 'Failed to create account')
+
+    //         successMessage.value = 'Account created successfully! Redirecting to Sign In page...'
+    //         setTimeout(() => router.push('/sign-in'), 2000)
+
+    //     } catch (err: any) {
+    //         errors.general = err.message
+    //     }
+    // }
+  async function signUp() {
+    if (!validateAll()) return
+
+    loading.value = true // Ak máš ref(false) na začiatku
+    errors.general = '' 
+    successMessage.value = ''
+
+    try {
+        const response = await fetch('http://localhost:8000/sign-up', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({
@@ -166,16 +198,35 @@
                 email: state.email,
                 password: state.password
             })
-            })
+        })
 
-            const data = await response.json()
-            if (!response.ok) throw new Error(data.detail || 'Failed to create account')
+        const data = await response.json()
 
-            successMessage.value = 'Account created successfully! Redirecting to Sign In page...'
-            setTimeout(() => router.push('/sign-in'), 2000)
-
-        } catch (err: any) {
-            errors.general = err.message
+        if (!response.ok) {
+            // TU JE TO HLAVNÉ:
+            // Ak backend vráti "Email already registered", data.detail bude obsahovať tento text.
+            throw new Error(data.detail || 'Registration failed')
         }
+
+        // AK PREJDE SEM, REGISTRÁCIA JE OK
+        successMessage.value = 'Account created successfully! Redirecting...'
+        
+        // Vyčistíme polia
+        state.username = ''
+        state.email = ''
+        state.password = ''
+        state.confirmPassword = ''
+
+        // Presmerovanie na prihlásenie
+        setTimeout(() => {
+            router.push('/sign-in')
+        }, 2500)
+
+    } catch (err: any) {
+        // Tu sa priradí správa "Email already registered" alebo "Username already exists"
+        errors.general = err.message
+    } finally {
+        loading.value = false
     }
+  }
 </script>

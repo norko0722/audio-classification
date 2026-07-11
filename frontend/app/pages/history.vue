@@ -54,7 +54,7 @@
       </div>
     </header>
 
-    <main class="max-w-7xl mx-auto px-4 py-8">
+    <main class="max-w-7xl mx-auto px-2 sm:px-4 lg:px-6 py-8">
       <div class="mb-8">
         <h2 class="text-white mb-2">Classification History</h2>
         <p class="text-gray-400">View all your previous audio genre classifications</p>
@@ -159,7 +159,8 @@
     if (route.path !== '/history') router.push('/history')
   }
 
-  const filteredHistory = computed(() => history.value)
+  const filteredHistory = computed(() => [...history.value].reverse())
+  // const filteredHistory = computed(() => history.value)
 
   const fetchHistory = async () => {
     // if (!userId.value) return

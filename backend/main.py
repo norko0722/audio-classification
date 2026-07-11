@@ -75,9 +75,15 @@ def get_db():
 async def root():
     return { "message": "Audio Genre Classification Project Norbert Balucha - FastAPI" }
 
+origins = [
+    "http://localhost:3000",
+    "http://localhost:8000",
+    "http://127.0.0.1:3000"
+]
+
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["http://localhost:3000"], 
+    allow_origins=origins,
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
@@ -151,6 +157,9 @@ def hash_password(password: str) -> str:
 
 
 def register_user(db: Session, username: str, email: str, password: str):
+    existing_user = get_user_by_email(db, email)
+    print(f"debug print: {email} {existing_user}") 
+
     if get_user_by_email(db, email):
         return {"error": "Email already registered"}
 
